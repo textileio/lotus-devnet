@@ -13,11 +13,11 @@ import (
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/textileio/lotus-api/api"
-	"github.com/textileio/lotus-api/api/apistruct"
-	"github.com/textileio/lotus-api/chain/types"
-	"github.com/textileio/lotus-api/lib/jsonrpc"
-	"github.com/textileio/lotus-api/storagemarket"
+	"github.com/textileio/lotus-client/api"
+	"github.com/textileio/lotus-client/api/apistruct"
+	"github.com/textileio/lotus-client/chain/types"
+	"github.com/textileio/lotus-client/lib/jsonrpc"
+	"github.com/textileio/lotus-client/storagemarket"
 )
 
 func TestMain(m *testing.M) {

@@ -11,12 +11,14 @@ require (
 	github.com/filecoin-project/specs-actors v0.0.0-20200312030511-3f5510bf6130
 	github.com/ipfs/go-datastore v0.4.4
 	github.com/ipfs/go-log/v2 v2.0.2
-	github.com/textileio/lotus-api v0.0.0-20200323185520-61a0ab7984f0
+	github.com/ipfs/go-merkledag v0.3.1 // indirect
 	github.com/libp2p/go-libp2p v0.5.2
 	github.com/libp2p/go-libp2p-core v0.4.0
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.5.1
+	github.com/textileio/lotus-client v0.0.0-20200323234837-ed79076e707b
+	github.com/whyrusleeping/cbor-gen v0.0.0-20200223203819-95cdfde1438f // indirect
 )
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
