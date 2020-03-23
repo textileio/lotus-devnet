@@ -1,0 +1,115 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AggregateResponse	extern/filecoin-ffi/filecoin.h	/^} AggregateResponse;$/;"	t	typeref:struct:__anon2
+BLSDigest	extern/filecoin-ffi/filecoin.h	/^typedef uint8_t BLSDigest[DIGEST_BYTES];$/;"	t
+BLSPrivateKey	extern/filecoin-ffi/filecoin.h	/^typedef uint8_t BLSPrivateKey[PRIVATE_KEY_BYTES];$/;"	t
+BLSPublicKey	extern/filecoin-ffi/filecoin.h	/^typedef uint8_t BLSPublicKey[PUBLIC_KEY_BYTES];$/;"	t
+BLSSignature	extern/filecoin-ffi/filecoin.h	/^typedef uint8_t BLSSignature[SIGNATURE_BYTES];$/;"	t
+DEPS	extern/filecoin-ffi/Makefile	/^DEPS:=filecoin.h filecoin.pc libfilecoin.a$/;"	m
+DIGEST_BYTES	extern/filecoin-ffi/filecoin.h	/^#define DIGEST_BYTES /;"	d
+FCPCallerError	extern/filecoin-ffi/filecoin.h	/^  FCPCallerError = 2,$/;"	e	enum:__anon1
+FCPNoError	extern/filecoin-ffi/filecoin.h	/^  FCPNoError = 0,$/;"	e	enum:__anon1
+FCPReceiverError	extern/filecoin-ffi/filecoin.h	/^  FCPReceiverError = 3,$/;"	e	enum:__anon1
+FCPResponseStatus	extern/filecoin-ffi/filecoin.h	/^} FCPResponseStatus;$/;"	t	typeref:enum:__anon1
+FCPUnclassifiedError	extern/filecoin-ffi/filecoin.h	/^  FCPUnclassifiedError = 1,$/;"	e	enum:__anon1
+FFICandidate	extern/filecoin-ffi/filecoin.h	/^} FFICandidate;$/;"	t	typeref:struct:__anon4
+FFIPrivateReplicaInfo	extern/filecoin-ffi/filecoin.h	/^} FFIPrivateReplicaInfo;$/;"	t	typeref:struct:__anon22
+FFIPublicPieceInfo	extern/filecoin-ffi/filecoin.h	/^} FFIPublicPieceInfo;$/;"	t	typeref:struct:__anon23
+FFISealPreCommitOutput	extern/filecoin-ffi/filecoin.h	/^} FFISealPreCommitOutput;$/;"	t	typeref:struct:__anon14
+FFISectorClass	extern/filecoin-ffi/filecoin.h	/^} FFISectorClass;$/;"	t	typeref:struct:__anon24
+FFI_DEPS	Makefile	/^FFI_DEPS:=$(addprefix $(FFI_PATH),$(FFI_DEPS))$/;"	m
+FFI_DEPS	Makefile	/^FFI_DEPS:=libfilecoin.a filecoin.pc filecoin.h$/;"	m
+FFI_PATH	Makefile	/^FFI_PATH:=.\/extern\/filecoin-ffi\/$/;"	m
+FILECOIN_H	extern/filecoin-ffi/filecoin.h	/^#define FILECOIN_H$/;"	d
+FinalizeTicketResponse	extern/filecoin-ffi/filecoin.h	/^} FinalizeTicketResponse;$/;"	t	typeref:struct:__anon3
+GenerateCandidatesResponse	extern/filecoin-ffi/filecoin.h	/^} GenerateCandidatesResponse;$/;"	t	typeref:struct:__anon5
+GenerateDataCommitmentResponse	extern/filecoin-ffi/filecoin.h	/^} GenerateDataCommitmentResponse;$/;"	t	typeref:struct:__anon6
+GeneratePieceCommitmentResponse	extern/filecoin-ffi/filecoin.h	/^} GeneratePieceCommitmentResponse;$/;"	t	typeref:struct:__anon7
+GeneratePoStResponse	extern/filecoin-ffi/filecoin.h	/^} GeneratePoStResponse;$/;"	t	typeref:struct:__anon8
+HashResponse	extern/filecoin-ffi/filecoin.h	/^} HashResponse;$/;"	t	typeref:struct:__anon9
+PARAMCACHE_PATH	Makefile	/^	PARAMCACHE_PATH=$(PARAMCACHE_PATH) go test -short -p 1 .\/... $/;"	m
+PARAMCACHE_PATH	Makefile	/^PARAMCACHE_PATH:=\/var\/tmp\/fil-tools\/filecoin-proof-parameters$/;"	m
+PRIVATE_KEY_BYTES	extern/filecoin-ffi/filecoin.h	/^#define PRIVATE_KEY_BYTES /;"	d
+PUBLIC_KEY_BYTES	extern/filecoin-ffi/filecoin.h	/^#define PUBLIC_KEY_BYTES /;"	d
+PrivateKeyGenerateResponse	extern/filecoin-ffi/filecoin.h	/^} PrivateKeyGenerateResponse;$/;"	t	typeref:struct:__anon10
+PrivateKeyPublicKeyResponse	extern/filecoin-ffi/filecoin.h	/^} PrivateKeyPublicKeyResponse;$/;"	t	typeref:struct:__anon11
+PrivateKeySignResponse	extern/filecoin-ffi/filecoin.h	/^} PrivateKeySignResponse;$/;"	t	typeref:struct:__anon12
+SIGNATURE_BYTES	extern/filecoin-ffi/filecoin.h	/^#define SIGNATURE_BYTES /;"	d
+SUBMODULES	Makefile	/^SUBMODULES=.update-modules$/;"	m
+SealCommitResponse	extern/filecoin-ffi/filecoin.h	/^} SealCommitResponse;$/;"	t	typeref:struct:__anon13
+SealPreCommitResponse	extern/filecoin-ffi/filecoin.h	/^} SealPreCommitResponse;$/;"	t	typeref:struct:__anon15
+UnsealRangeResponse	extern/filecoin-ffi/filecoin.h	/^} UnsealRangeResponse;$/;"	t	typeref:struct:__anon16
+UnsealResponse	extern/filecoin-ffi/filecoin.h	/^} UnsealResponse;$/;"	t	typeref:struct:__anon17
+VerifyPoStResponse	extern/filecoin-ffi/filecoin.h	/^} VerifyPoStResponse;$/;"	t	typeref:struct:__anon18
+VerifySealResponse	extern/filecoin-ffi/filecoin.h	/^} VerifySealResponse;$/;"	t	typeref:struct:__anon19
+WriteWithAlignmentResponse	extern/filecoin-ffi/filecoin.h	/^} WriteWithAlignmentResponse;$/;"	t	typeref:struct:__anon20
+WriteWithoutAlignmentResponse	extern/filecoin-ffi/filecoin.h	/^} WriteWithoutAlignmentResponse;$/;"	t	typeref:struct:__anon21
+build_from_source	extern/filecoin-ffi/install-shared.bash	/^build_from_source() {$/;"	f
+cache_dir_path	extern/filecoin-ffi/filecoin.h	/^  const char *cache_dir_path;$/;"	m	struct:__anon22
+candidates_len	extern/filecoin-ffi/filecoin.h	/^  size_t candidates_len;$/;"	m	struct:__anon5
+candidates_ptr	extern/filecoin-ffi/filecoin.h	/^  const FFICandidate *candidates_ptr;$/;"	m	struct:__anon5
+comm_d	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_d[32];$/;"	m	struct:__anon14
+comm_d	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_d[32];$/;"	m	struct:__anon6
+comm_p	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_p[32];$/;"	m	struct:__anon20
+comm_p	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_p[32];$/;"	m	struct:__anon21
+comm_p	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_p[32];$/;"	m	struct:__anon23
+comm_p	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_p[32];$/;"	m	struct:__anon7
+comm_r	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_r[32];$/;"	m	struct:__anon14
+comm_r	extern/filecoin-ffi/filecoin.h	/^  uint8_t comm_r[32];$/;"	m	struct:__anon22
+digest	extern/filecoin-ffi/filecoin.h	/^  BLSDigest digest;$/;"	m	struct:__anon9
+download_release_tarball	extern/filecoin-ffi/install-shared.bash	/^download_release_tarball() {$/;"	f
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon13
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon15
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon16
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon17
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon18
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon19
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon20
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon21
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon3
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon5
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon6
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon7
+error_msg	extern/filecoin-ffi/filecoin.h	/^  const char *error_msg;$/;"	m	struct:__anon8
+flattened_proofs_len	extern/filecoin-ffi/filecoin.h	/^  size_t flattened_proofs_len;$/;"	m	struct:__anon8
+flattened_proofs_ptr	extern/filecoin-ffi/filecoin.h	/^  const uint8_t *flattened_proofs_ptr;$/;"	m	struct:__anon8
+is_valid	extern/filecoin-ffi/filecoin.h	/^  bool is_valid;$/;"	m	struct:__anon18
+is_valid	extern/filecoin-ffi/filecoin.h	/^  bool is_valid;$/;"	m	struct:__anon19
+left_alignment_unpadded	extern/filecoin-ffi/filecoin.h	/^  uint64_t left_alignment_unpadded;$/;"	m	struct:__anon20
+num_bytes	extern/filecoin-ffi/filecoin.h	/^  uint64_t num_bytes;$/;"	m	struct:__anon23
+num_bytes_aligned	extern/filecoin-ffi/filecoin.h	/^  uint64_t num_bytes_aligned;$/;"	m	struct:__anon7
+partial_ticket	extern/filecoin-ffi/filecoin.h	/^  uint8_t partial_ticket[32];$/;"	m	struct:__anon4
+porep_proof_partitions	extern/filecoin-ffi/filecoin.h	/^  uint8_t porep_proof_partitions;$/;"	m	struct:__anon24
+private_key	extern/filecoin-ffi/filecoin.h	/^  BLSPrivateKey private_key;$/;"	m	struct:__anon10
+proof_len	extern/filecoin-ffi/filecoin.h	/^  size_t proof_len;$/;"	m	struct:__anon13
+proof_ptr	extern/filecoin-ffi/filecoin.h	/^  const uint8_t *proof_ptr;$/;"	m	struct:__anon13
+public_key	extern/filecoin-ffi/filecoin.h	/^  BLSPublicKey public_key;$/;"	m	struct:__anon11
+replica_path	extern/filecoin-ffi/filecoin.h	/^  const char *replica_path;$/;"	m	struct:__anon22
+seal_pre_commit_output	extern/filecoin-ffi/filecoin.h	/^  FFISealPreCommitOutput seal_pre_commit_output;$/;"	m	struct:__anon15
+sector_challenge_index	extern/filecoin-ffi/filecoin.h	/^  uint64_t sector_challenge_index;$/;"	m	struct:__anon4
+sector_id	extern/filecoin-ffi/filecoin.h	/^  uint64_t sector_id;$/;"	m	struct:__anon22
+sector_id	extern/filecoin-ffi/filecoin.h	/^  uint64_t sector_id;$/;"	m	struct:__anon4
+sector_size	extern/filecoin-ffi/filecoin.h	/^  uint64_t sector_size;$/;"	m	struct:__anon24
+signature	extern/filecoin-ffi/filecoin.h	/^  BLSSignature signature;$/;"	m	struct:__anon12
+signature	extern/filecoin-ffi/filecoin.h	/^  BLSSignature signature;$/;"	m	struct:__anon2
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon13
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon15
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon16
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon17
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon18
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon19
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon20
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon21
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon3
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon5
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon6
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon7
+status_code	extern/filecoin-ffi/filecoin.h	/^  FCPResponseStatus status_code;$/;"	m	struct:__anon8
+ticket	extern/filecoin-ffi/filecoin.h	/^  uint8_t ticket[32];$/;"	m	struct:__anon3
+ticket	extern/filecoin-ffi/filecoin.h	/^  uint8_t ticket[32];$/;"	m	struct:__anon4
+total_write_unpadded	extern/filecoin-ffi/filecoin.h	/^  uint64_t total_write_unpadded;$/;"	m	struct:__anon20
+total_write_unpadded	extern/filecoin-ffi/filecoin.h	/^  uint64_t total_write_unpadded;$/;"	m	struct:__anon21
