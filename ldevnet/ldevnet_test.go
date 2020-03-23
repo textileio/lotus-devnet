@@ -1,7 +1,9 @@
 package ldevnet
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -11,10 +13,11 @@ import (
 
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/textileio/lotus-client/api"
-	"github.com/textileio/lotus-client/api/apistruct"
-	"github.com/textileio/lotus-client/chain/types"
-	"github.com/textileio/lotus-client/lib/jsonrpc"
+	"github.com/textileio/lotus-api/api"
+	"github.com/textileio/lotus-api/api/apistruct"
+	"github.com/textileio/lotus-api/chain/types"
+	"github.com/textileio/lotus-api/lib/jsonrpc"
+	"github.com/textileio/lotus-api/storagemarket"
 )
 
 func TestMain(m *testing.M) {
@@ -35,13 +38,12 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
 	time.Sleep(time.Second)
 	ctx := context.Background()
 
 	ts, err := client.ChainHead(ctx)
 	require.Nil(t, err)
-	require.Greater(t, ts.Height(), uint64(5))
+	require.Greater(t, int64(ts.Height()), int64(5))
 
 	miners, err := client.StateListMiners(ctx, types.EmptyTSK)
 	require.Nil(t, err)
@@ -58,11 +60,18 @@ func TestStore(t *testing.T) {
 	rand.New(rand.NewSource(22)).Read(data)
 	err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 	require.Nil(t, err)
-	fcid, err := client.ClientImport(ctx, tmpf.Name())
+	fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
 	require.Nil(t, err)
 	require.True(t, fcid.Defined())
 
-	deal, err := client.ClientStartDeal(ctx, fcid, waddr, miners[0], types.NewInt(40000000), 100)
+	sdp := &api.StartDealParams{
+		Data:           &storagemarket.DataRef{Root: fcid},
+		Wallet:         waddr,
+		EpochPrice:     types.NewInt(1000000),
+		BlocksDuration: 100,
+		Miner:          miners[0],
+	}
+	deal, err := client.ClientStartDeal(ctx, sdp)
 	require.Nil(t, err)
 
 	time.Sleep(time.Second)
@@ -72,13 +81,14 @@ loop:
 		require.Nil(t, err)
 
 		switch di.State {
-		case api.DealRejected:
+		case storagemarket.StorageDealProposalRejected:
 			t.Fatal("deal rejected")
-		case api.DealFailed:
+		case storagemarket.StorageDealFailing:
 			t.Fatal("deal failed")
-		case api.DealError:
+		case storagemarket.StorageDealError:
 			t.Fatal("deal errored")
-		case api.DealComplete:
+		case storagemarket.StorageDealActive:
+			fmt.Println("COMPLETE", di)
 			break loop
 		}
 		time.Sleep(time.Second)
@@ -92,10 +102,14 @@ loop:
 	require.Nil(t, err)
 	defer os.RemoveAll(rpath)
 
-	err = client.ClientRetrieve(ctx, offers[0].Order(waddr), filepath.Join(rpath, "ret"))
+	ref := api.FileRef{
+		Path:  filepath.Join(rpath, "ret"),
+		IsCAR: false,
+	}
+	err = client.ClientRetrieve(ctx, offers[0].Order(waddr), ref)
 	require.Nil(t, err)
 
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	require.Nil(t, err)
-	require.Equal(t, data, rdata)
+	require.True(t, bytes.Equal(data, rdata))
 }
