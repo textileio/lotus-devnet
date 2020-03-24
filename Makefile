@@ -17,16 +17,14 @@ $(FFI_DEPS): .filecoin-build ;
 build: .update-modules .filecoin-build
 .PHONY: build
 
-clean:
+PARAMCACHE_PATH:=/var/tmp/fil-tools/filecoin-proof-parameters
+test: build
 	rm -f .filecoin-build
 	rm -f .update-modules
 	git submodule deinit --all -f
-
-PARAMCACHE_PATH:=/var/tmp/fil-tools/filecoin-proof-parameters
-test: build
 	mkdir -p $(PARAMCACHE_PATH)
 	cat build/proof-params/parameters.json | jq 'keys[]' | xargs touch
 	mv -n v20* $(PARAMCACHE_PATH)
 	rm v20* || true
-	PARAMCACHE_PATH=$(PARAMCACHE_PATH) go test ./... 
+	PARAMCACHE_PATH=$(PARAMCACHE_PATH) go test -count 1 ./...
 .PHONY: test
