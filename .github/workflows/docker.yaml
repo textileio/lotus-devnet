@@ -7,7 +7,6 @@ jobs:
   docker:
     name: Docker publishing
     runs-on: self-hosted
-    needs: Test
     steps:
       - name: Publish
         uses: docker/build-push-action@v1
