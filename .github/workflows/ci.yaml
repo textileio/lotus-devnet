@@ -33,6 +33,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: textileio/lotus-devnet
+          repository: textile/lotus-devnet
           tag_with_ref: true
           tag_with_sha: true
