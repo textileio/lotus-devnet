@@ -15,7 +15,7 @@ RUN mkdir -p extern extern
 WORKDIR /app/extern
 RUN git clone https://github.com/filecoin-project/filecoin-ffi
 WORKDIR /app/extern/filecoin-ffi
-RUN git checkout 58761d3dca0f3617023240eb8b7f8b324db75b2a
+RUN git checkout f20cfbe28d99beda69e5416c6829927945116428
 WORKDIR /app
 COPY Makefile Makefile
 RUN make .filecoin-build
