@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 on:
   push:
     branches:
@@ -22,3 +22,11 @@ jobs:
         uses: actions/checkout@v1
       - name: Test
         run: make test
+      - name: Publish
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: textileio/lotus-devnet
+          tag_with_ref: true
+          tag_with_sha: true
