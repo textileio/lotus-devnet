@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - testnet/3
-      - jsign/ghtests
   pull_request:
     branches:
       - testnet/3
