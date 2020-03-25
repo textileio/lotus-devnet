@@ -19,7 +19,7 @@ var (
 
 func main() {
 	pflag.Int("numminers", 1, "Number of miners in devnet")
-	pflag.Int("speed", 50, "Chain speed block creation in ms")
+	pflag.Int("speed", 100, "Chain speed block creation in ms")
 	pflag.Parse()
 
 	config.SetEnvPrefix("TEXLOTUSDEVNET")

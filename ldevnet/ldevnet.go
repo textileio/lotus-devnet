@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
@@ -42,11 +43,10 @@ import (
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 )
 
-var DefaultDuration = time.Millisecond * 100
-
 func init() {
 	build.SectorSizes = []abi.SectorSize{2048}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
+	os.Setenv("TRUST_PARAMS", "1")
 }
 
 type LocalDevnet struct {
