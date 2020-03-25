@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
@@ -30,9 +29,8 @@ import (
 	"github.com/filecoin-project/lotus/node/modules"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
-	"github.com/filecoin-project/lotus/storage/sbmock"
-	"github.com/filecoin-project/lotus/storage/sealmgr"
-	"github.com/filecoin-project/lotus/storage/sealmgr/advmgr"
+	"github.com/filecoin-project/lotus/storage/sectorstorage"
+	"github.com/filecoin-project/lotus/storage/sectorstorage/mock"
 	"github.com/filecoin-project/specs-actors/actors/abi"
 	"github.com/filecoin-project/specs-actors/actors/abi/big"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
@@ -49,7 +47,6 @@ var DefaultDuration = time.Millisecond * 100
 func init() {
 	build.SectorSizes = []abi.SectorSize{2048}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
-	os.Setenv("TRUST_PARAMS", "1")
 }
 
 type LocalDevnet struct {
@@ -225,7 +222,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		if err != nil {
 			return nil, nil, err
 		}
-		genm, k, err := sbmock.PreSeal(2048, maddr, nPreseal)
+		genm, k, err := mock.PreSeal(2048, maddr, nPreseal)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -251,6 +248,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		Accounts: genaccs,
 		Miners:   genms,
 	}
+
 	// END PRESEAL SECTION
 
 	for i := 0; i < nFull; i++ {
@@ -270,7 +268,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 			node.MockHost(mn),
 			node.Test(),
 
-			node.Override(new(sectorbuilder.Verifier), sbmock.MockVerifier),
+			node.Override(new(sectorbuilder.Verifier), mock.MockVerifier),
 
 			genesis,
 		)
@@ -296,10 +294,10 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		wa := genms[i].Worker
 
 		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options(
-			node.Override(new(sealmgr.Manager), func() (sealmgr.Manager, error) {
-				return sealmgr.NewSimpleManager(storedcounter.New(datastore.NewMapDatastore(), datastore.NewKey("/potato")), genMiner, sbmock.NewMockSectorBuilder(5, build.SectorSizes[0]))
+			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
+				return mock.NewMockSectorMgr(5, build.SectorSizes[0]), nil
 			}),
-			node.Unset(new(*advmgr.Manager)),
+			node.Unset(new(*sectorstorage.Manager)),
 		))
 	}
 
@@ -344,6 +342,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	for i := 0; i < nPreseal; i++ {
 		nic.Next()
 	}
+	nic.Next()
 
 	err = lr.Close()
 	if err != nil {
