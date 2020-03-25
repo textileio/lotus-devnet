@@ -12,10 +12,12 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
-	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/lib/jsonrpc"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
+	"github.com/textileio/lotus-client/api"
+	"github.com/textileio/lotus-client/api/apistruct"
 )
 
 func TestMain(m *testing.M) {
@@ -24,18 +26,18 @@ func TestMain(m *testing.M) {
 }
 
 func TestStore(t *testing.T) {
-	dnet, err := New(1, time.Millisecond*50)
+	_, err := New(1, time.Millisecond*50)
 	require.Nil(t, err)
-	client := dnet.Client
-	// var client apistruct.FullNodeStruct
-	// _, err = jsonrpc.NewMergeClient("ws://127.0.0.1:7777/rpc/v0", "Filecoin",
-	// 	[]interface{}{
-	// 		&client.Internal,
-	// 		&client.CommonStruct.Internal,
-	// 	}, nil)
-	// if err != nil {
-	// 	panic(err)
-	// }
+
+	var client apistruct.FullNodeStruct
+	_, err = jsonrpc.NewMergeClient("ws://127.0.0.1:7777/rpc/v0", "Filecoin",
+		[]interface{}{
+			&client.Internal,
+			&client.CommonStruct.Internal,
+		}, nil)
+	if err != nil {
+		panic(err)
+	}
 	time.Sleep(time.Second)
 	ctx := context.Background()
 
