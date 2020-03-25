@@ -43,6 +43,11 @@ import (
 	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
 )
 
+const (
+	DefaultDurationMs = 100
+	DefaultDuration   = time.Millisecond * DefaultDurationMs
+)
+
 func init() {
 	build.SectorSizes = []abi.SectorSize{2048}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
