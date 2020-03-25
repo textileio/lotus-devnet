@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/jsonrpc"
-	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/textileio/lotus-client/api"
@@ -56,8 +56,8 @@ func TestStore(t *testing.T) {
 	tmpf, err := ioutil.TempFile("", "")
 	require.Nil(t, err)
 
-	data := make([]byte, 1000)
-	rand.New(rand.NewSource(22)).Read(data)
+	data := make([]byte, 1600)
+	rand.New(rand.NewSource(5)).Read(data)
 	err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 	require.Nil(t, err)
 	fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
