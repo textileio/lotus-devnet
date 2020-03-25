@@ -1,5 +1,5 @@
 FROM golang:1.14 as builder
-RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev
+RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev jq
 
 WORKDIR /tmp
 RUN curl https://sh.rustup.rs -sSf > rustup.sh
@@ -11,18 +11,9 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN mkdir /app 
 WORKDIR /app 
 
-RUN mkdir -p extern extern
-WORKDIR /app/extern
-RUN git clone https://github.com/filecoin-project/filecoin-ffi
-WORKDIR /app/extern/filecoin-ffi
-RUN git checkout 41b20ed16500eb5b4bacd07ec8aee386257e56da
-WORKDIR /app
-COPY Makefile Makefile
-RUN make .filecoin-build
-
-COPY go.mod go.sum ./
-RUN go mod download
 COPY . .
+RUN mkdir -p extern/filecoin-ffi
+RUN make clean build
 RUN GOOS=linux go build -o local-devnet main.go  && \
 go run github.com/GeertJohan/go.rice/rice append --exec local-devnet -i ./build
 
