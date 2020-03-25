@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/filecoin-project/lotus/chain/types"
+	"github.com/filecoin-project/lotus/lib/jsonrpc"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/textileio/lotus-client/api"
 	"github.com/textileio/lotus-client/api/apistruct"
-	"github.com/textileio/lotus-client/chain/types"
-	"github.com/textileio/lotus-client/lib/jsonrpc"
 )
 
 func TestMain(m *testing.M) {

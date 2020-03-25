@@ -18,7 +18,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.5.1
-	github.com/textileio/lotus-client v0.0.0-20200323231235-5c42584d6d6d
+	github.com/textileio/lotus-client v0.0.0-20200325135647-dde4c5dd7bd3
 	github.com/whyrusleeping/cbor-gen v0.0.0-20200223203819-95cdfde1438f // indirect
 )
 
