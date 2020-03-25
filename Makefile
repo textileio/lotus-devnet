@@ -1,25 +1,32 @@
-SUBMODULES=.update-modules
-
-FFI_PATH:=./extern/filecoin-ffi/
-FFI_DEPS:=libfilecoin.a filecoin.pc filecoin.h
+FFI_PATH:=extern/filecoin-ffi/
+FFI_DEPS:=.install-filcrypto
 FFI_DEPS:=$(addprefix $(FFI_PATH),$(FFI_DEPS))
 
-$(FFI_DEPS): .filecoin-build ;
+$(FFI_DEPS): build/.filecoin-install ;
 
-.filecoin-build: $(FFI_PATH)
+build/.filecoin-install: $(FFI_PATH)
 	$(MAKE) -C $(FFI_PATH) $(FFI_DEPS:$(FFI_PATH)%=%)
 	@touch $@
 
-.update-modules:
-	git submodule update --init --recursive
-	@touch $@
+MODULES+=$(FFI_PATH)
+BUILD_DEPS+=build/.filecoin-install
+CLEAN+=build/.filecoin-install
 
-build: .update-modules .filecoin-build
+$(MODULES): build/.update-modules ;
+
+# dummy file that marks the last time modules were updated
+build/.update-modules:
+	git submodule update --init --recursive
+	touch $@
+
+# end git modules
+
+build: $(BUILD_DEPS)
 .PHONY: build
 
 clean:
-	rm -f .filecoin-build
-	rm -f .update-modules
+	rm -f build/.filecoin-install
+	rm -f build/.update-modules
 	git submodule deinit --all -f
 
 PARAMCACHE_PATH:=/var/tmp/fil-tools/filecoin-proof-parameters
