@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"time"
 
 	"github.com/filecoin-project/go-address"
@@ -48,7 +47,6 @@ var DefaultDuration = time.Millisecond * 100
 func init() {
 	build.SectorSizes = []abi.SectorSize{2048}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
-	os.Setenv("TRUST_PARAMS", "1")
 }
 
 type LocalDevnet struct {
@@ -250,6 +248,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		Accounts: genaccs,
 		Miners:   genms,
 	}
+
 	// END PRESEAL SECTION
 
 	for i := 0; i < nFull; i++ {
@@ -343,6 +342,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	for i := 0; i < nPreseal; i++ {
 		nic.Next()
 	}
+	nic.Next()
 
 	err = lr.Close()
 	if err != nil {
