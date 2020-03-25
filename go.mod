@@ -16,7 +16,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.5.1
-	github.com/textileio/lotus-client v0.0.0-20200325195407-93be23d89aa7
+	github.com/textileio/lotus-client v0.0.0-20200325200032-ce551e33eec6
 	go4.org v0.0.0-20190313082347-94abd6928b1d // indirect
 )
 
