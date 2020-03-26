@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - testnet/3
+      - master
   pull_request:
     branches:
-      - testnet/3
+      - master
 jobs:
   test:
     name: Test

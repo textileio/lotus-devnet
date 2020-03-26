@@ -3,7 +3,7 @@ on:
   create:
   push:
     branches:
-        - testnet/3
+        - master
 jobs:
   docker:
     name: Docker publishing
