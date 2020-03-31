@@ -102,7 +102,6 @@ github.com/fatih/color v1.8.0 h1:5bzFgL+oy7JITMTxUPJ00n7VxmYd/PdMp5mHFX40/RY=
 github.com/fatih/color v1.8.0/go.mod h1:3l45GVGkyrnYNl9HoIjnp2NnNWvh6hLAqD8yTfGjnw8=
 github.com/fd/go-nat v1.0.0/go.mod h1:BTBu/CKvMmOMUPkKVef1pngt2WFH/lg7E6yQnulfp6E=
 github.com/filecoin-project/chain-validation v0.0.3/go.mod h1:NCEGFjcWRjb8akWFSOXvU6n2efkWIqAeOKU6o5WBGQw=
-github.com/filecoin-project/chain-validation v0.0.6-0.20200324185232-f581621b7fbf/go.mod h1:YTLxUr6gOZpkUaXzLe7OZ4s1dpfJGp2FY/J2/K5DJqc=
 github.com/filecoin-project/chain-validation v0.0.6-0.20200331055055-403d5af6c808 h1:e6Z9bA8X+NWlQippezOm5uR/WJgJ4t3QHvJd1NHb9Us=
 github.com/filecoin-project/chain-validation v0.0.6-0.20200331055055-403d5af6c808/go.mod h1:mXiAviXMZ2WVGmWNtjGr0JPMpNCNsPU774DawKZCzzM=
 github.com/filecoin-project/go-address v0.0.0-20191219011437-af739c490b4f/go.mod h1:rCbpXPva2NKF9/J4X6sr7hbKBgQCxyFtRj7KOZqoIms=
@@ -146,7 +145,6 @@ github.com/filecoin-project/go-statestore v0.1.0 h1:t56reH59843TwXHkMcwyuayStBIi
 github.com/filecoin-project/go-statestore v0.1.0/go.mod h1:LFc9hD+fRxPqiHiaqUEZOinUJB4WARkRfNl10O7kTnI=
 github.com/filecoin-project/lotus v0.2.10 h1:ijrj/nYdKu5GiMo9r1+Zcp2A4jKHSOMZ2WNy2K/mtOE=
 github.com/filecoin-project/lotus v0.2.10/go.mod h1:om5PQA9ZT0lf16qI7Fz/ZGLn4LDCMqPC8ntZA9uncRE=
-github.com/filecoin-project/lotus v0.2.11-0.20200325195024-d41aeb9b4507/go.mod h1:Z4bBdiQ/ueEqAopQjByLtcUP4M7Lf3ukGoS+5HLxth0=
 github.com/filecoin-project/lotus v0.2.11-0.20200331202907-e94d136e3558 h1:APv1pnqW434BjR27OuxAHCrD8OalOQmNZ4xzQMRBD3Q=
 github.com/filecoin-project/lotus v0.2.11-0.20200331202907-e94d136e3558/go.mod h1:3a2Q2qfO6Oob1xoo3rBwDUX6GBhVSwliMsMOTy3MDhc=
 github.com/filecoin-project/sector-storage v0.0.0-20200327233338-c4b928d44163 h1:ZCvy0S7RI96OYRqMslHFi75vsD/DRYcY3yjRvdawC08=
@@ -154,8 +152,6 @@ github.com/filecoin-project/sector-storage v0.0.0-20200327233338-c4b928d44163/go
 github.com/filecoin-project/specs-actors v0.0.0-20200210130641-2d1fbd8672cf/go.mod h1:xtDZUB6pe4Pksa/bAJbJ693OilaC5Wbot9jMhLm3cZA=
 github.com/filecoin-project/specs-actors v0.0.0-20200226200336-94c9b92b2775/go.mod h1:0HAWYrvajFHDgRaKbF0rl+IybVLZL5z4gQ8koCMPhoU=
 github.com/filecoin-project/specs-actors v0.0.0-20200302223606-0eaf97b10aaf/go.mod h1:0HAWYrvajFHDgRaKbF0rl+IybVLZL5z4gQ8koCMPhoU=
-github.com/filecoin-project/specs-actors v0.0.0-20200306000749-99e98e61e2a0/go.mod h1:0HAWYrvajFHDgRaKbF0rl+IybVLZL5z4gQ8koCMPhoU=
-github.com/filecoin-project/specs-actors v0.0.0-20200321055844-54fa2e8da1c2/go.mod h1:5WngRgTN5Eo4+0SjCBqLzEr2l6Mj45DrP2606gBhqI0=
 github.com/filecoin-project/specs-actors v0.0.0-20200324235424-aef9b20a9fb1 h1:IL6A1yAamz0HtLQEdZS57hnRZHPL11VIrQxMZ1Nn5hI=
 github.com/filecoin-project/specs-actors v0.0.0-20200324235424-aef9b20a9fb1/go.mod h1:5WngRgTN5Eo4+0SjCBqLzEr2l6Mj45DrP2606gBhqI0=
 github.com/filecoin-project/specs-storage v0.0.0-20200317133846-063ba163b217/go.mod h1:dUmzHS7izOD6HW3/JpzFrjxnptxbsHXBlO8puK2UzBk=
@@ -778,7 +774,6 @@ github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f/go.mod h1:
 github.com/prometheus/common v0.0.0-20181126121408-4724e9255275/go.mod h1:daVV7qP5qjZbuso7PdcryaAu0sAZbrN9i7WWcTMWvro=
 github.com/prometheus/common v0.2.0 h1:kUZDBDTdBVBYBj5Tmh2NZLlF60mfjA27rM34b+cVwNU=
 github.com/prometheus/common v0.2.0/go.mod h1:TNfzLD0ON7rHzMJeJkieUDPYmFC7Snx/y86RQel1bk4=
-github.com/prometheus/common v0.4.0/go.mod h1:TNfzLD0ON7rHzMJeJkieUDPYmFC7Snx/y86RQel1bk4=
 github.com/prometheus/procfs v0.0.0-20181005140218-185b4288413d/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20181204211112-1dc9a6cbc91a/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20190117184657-bf6a532e95b1/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
@@ -834,10 +829,8 @@ github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81P
 github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/syndtr/goleveldb v1.0.0/go.mod h1:ZVVdQEZoIme9iO1Ch2Jdy24qqXrMMOU6lpPAyBWyWuQ=
-github.com/textileio/lotus-client v0.0.0-20200325200032-ce551e33eec6 h1:iZrx6qha0XgoNSlhtB06C48k8CQgGrxYx7CSj8EBKeM=
-github.com/textileio/lotus-client v0.0.0-20200325200032-ce551e33eec6/go.mod h1:DXmY48UB51yNmDjDpcew8bvj9u7PhJqX2TQjt/zzcW8=
-github.com/textileio/lotus-client v0.0.0-20200331223428-5842b040af61 h1:afe2c2vmn31FLJNx7/69zJbw4ZASzrhsbnqP2XkdIyw=
-github.com/textileio/lotus-client v0.0.0-20200331223428-5842b040af61/go.mod h1:t4RWwV+v/sh4Bl7fpinEqewQqOX6rGKK8zIxeRUZjpE=
+github.com/textileio/lotus-client v0.0.0-20200331225835-db60fa302a4c h1:QO34i3kpjU+K6AS6TvU43sOnuX3H/FNe5fz+Cemd7/Y=
+github.com/textileio/lotus-client v0.0.0-20200331225835-db60fa302a4c/go.mod h1:t4RWwV+v/sh4Bl7fpinEqewQqOX6rGKK8zIxeRUZjpE=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
 github.com/urfave/cli v1.20.0 h1:fDqGv3UG/4jbVl/QkFwEdddtEDjh/5Ov6X+0B/3bPaw=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
