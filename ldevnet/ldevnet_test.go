@@ -56,7 +56,7 @@ func TestStore(t *testing.T) {
 	tmpf, err := ioutil.TempFile("", "")
 	require.Nil(t, err)
 
-	data := make([]byte, 1600)
+	data := make([]byte, 600)
 	rand.New(rand.NewSource(5)).Read(data)
 	err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 	require.Nil(t, err)
