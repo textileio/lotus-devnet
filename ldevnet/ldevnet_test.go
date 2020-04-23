@@ -21,12 +21,12 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	_ = logging.SetLogLevel("*", "INFO")
+	logging.SetAllLoggers(logging.LevelDebug)
 	os.Exit(m.Run())
 }
 
 func TestStore(t *testing.T) {
-	_, err := New(1, time.Millisecond*100)
+	_, err := New(1, time.Millisecond*50)
 	require.Nil(t, err)
 
 	var client apistruct.FullNodeStruct
