@@ -16,7 +16,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.4.0
-	github.com/textileio/lotus-client v0.0.0-20200423150613-e9939eba3b2b
+	github.com/textileio/lotus-client v0.0.0-20200423155630-a78508702421
 )
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
