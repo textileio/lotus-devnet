@@ -21,12 +21,12 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	logging.SetAllLoggers(logging.LevelError)
+	_ = logging.SetLogLevel("*", "INFO")
 	os.Exit(m.Run())
 }
 
 func TestStore(t *testing.T) {
-	_, err := New(1, time.Millisecond*50)
+	_, err := New(1, time.Millisecond*100)
 	require.Nil(t, err)
 
 	var client apistruct.FullNodeStruct
@@ -65,11 +65,11 @@ func TestStore(t *testing.T) {
 	require.True(t, fcid.Defined())
 
 	sdp := &api.StartDealParams{
-		Data:           &storagemarket.DataRef{Root: fcid},
-		Wallet:         waddr,
-		EpochPrice:     types.NewInt(1000000),
-		BlocksDuration: 100,
-		Miner:          miners[0],
+		Data:              &storagemarket.DataRef{Root: fcid},
+		Wallet:            waddr,
+		EpochPrice:        types.NewInt(1000000),
+		MinBlocksDuration: 100,
+		Miner:             miners[0],
 	}
 	deal, err := client.ClientStartDeal(ctx, sdp)
 	require.Nil(t, err)
@@ -91,6 +91,7 @@ loop:
 			fmt.Println("COMPLETE", di)
 			break loop
 		}
+		fmt.Println(di.State)
 		time.Sleep(time.Second)
 	}
 

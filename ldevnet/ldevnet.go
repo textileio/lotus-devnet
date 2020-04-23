@@ -56,6 +56,7 @@ func init() {
 	build.SectorSizes = []abi.SectorSize{2048}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
 	os.Setenv("TRUST_PARAMS", "1")
+	os.Setenv("BELLMAN_NO_GPU", "1")
 }
 
 type LocalDevnet struct {
@@ -254,8 +255,9 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		genms = append(genms, *genm)
 	}
 	templ := &genesis.Template{
-		Accounts: genaccs,
-		Miners:   genms,
+		Accounts:  genaccs,
+		Miners:    genms,
+		Timestamp: uint64(time.Now().Unix() - 10000),
 	}
 
 	// END PRESEAL SECTION
