@@ -99,22 +99,24 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 			return nil, err
 		}
 		time.Sleep(time.Second)
-
-		mine := i == 0
-		go func(i int) {
-			defer func() { done <- struct{}{} }()
-			for mine {
-				time.Sleep(blockDur)
-				if ctx.Err() != nil {
-					mine = false
-					continue
-				}
-				if err := sn[i].MineOne(context.Background()); err != nil {
-					panic(err)
-				}
-			}
-		}(i)
 	}
+	go func() {
+		i := 0
+		mine := true
+		defer func() { done <- struct{}{} }()
+		for mine {
+			time.Sleep(blockDur)
+			if ctx.Err() != nil {
+				mine = false
+				continue
+			}
+			if err := sn[i].MineOne(context.Background()); err != nil {
+				panic(err)
+			}
+			i = (i + 1) % len(miners)
+		}
+	}()
+
 	for i := range miners {
 		for j := range miners {
 			if j == i {
@@ -132,7 +134,7 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 		}
 	}
 
-	time.Sleep(blockDur * 5) // Give time to mine at least 1 block
+	time.Sleep(blockDur * 2) // Give time to mine at least 1 block
 	return &LocalDevnet{
 		Client:    client,
 		closer:    closer,
@@ -236,7 +238,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		if err != nil {
 			return nil, nil, err
 		}
-		genm.PeerId = minersPid[0]
+		genm.PeerId = minersPid[i]
 
 		wk, err := wallet.NewKey(*k)
 		if err != nil {
