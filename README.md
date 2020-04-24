@@ -2,6 +2,8 @@
 Runs a Lotus Devnet using a mocked _sectorbuilder_ which can be accesed as a real Lotus node through the API.
 This code is experimental.
 
+The devnet code is always up to date with the latest `interopnet` Lotus branch.
+
 ## Run
 You can run the devnet with:
 ```bash
