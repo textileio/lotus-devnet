@@ -12,12 +12,12 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/lotus/api"
+	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/lib/jsonrpc"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/textileio/lotus-client/api"
-	"github.com/textileio/lotus-client/api/apistruct"
 )
 
 func TestMain(m *testing.M) {
@@ -68,8 +68,8 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		tmpf, err := ioutil.TempFile("", "")
 		require.Nil(t, err)
 
-		data := make([]byte, 600)
-		rand.New(rand.NewSource(5)).Read(data)
+		data := make([]byte, 1600)
+		rand.New(rand.NewSource(6)).Read(data)
 		err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 		require.Nil(t, err)
 		fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
@@ -87,6 +87,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		require.Nil(t, err)
 
 		time.Sleep(time.Second)
+
 	loop:
 		for {
 			di, err := client.ClientGetDealInfo(ctx, *deal)

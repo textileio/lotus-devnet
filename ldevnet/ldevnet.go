@@ -11,10 +11,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/filecoin-project/lotus/storage/mockstorage"
-
 	"github.com/filecoin-project/go-fil-markets/storedcounter"
 	"github.com/filecoin-project/lotus/api/apistruct"
+	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -42,9 +41,6 @@ import (
 	"github.com/filecoin-project/lotus/node/modules"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
-	sectorstorage "github.com/filecoin-project/sector-storage"
-	"github.com/filecoin-project/sector-storage/ffiwrapper"
-	"github.com/filecoin-project/sector-storage/mock"
 )
 
 const (
@@ -110,7 +106,7 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 				mine = false
 				continue
 			}
-			if err := sn[i].MineOne(context.Background()); err != nil {
+			if err := sn[i].MineOne(context.Background(), func(bool) {}); err != nil {
 				panic(err)
 			}
 			i = (i + 1) % len(miners)
@@ -192,7 +188,7 @@ func rpcBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNo
 	}, nil
 }
 
-const nPreseal = 2
+const nGenesisPreseals = 2
 
 func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
@@ -220,11 +216,13 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 
 	// PRESEAL SECTION, TRY TO REPLACE WITH BETTER IN THE FUTURE
 	// TODO: would be great if there was a better way to fake the preseals
+
 	var genms []genesis.Miner
-	var genaccs []genesis.Actor
 	var maddrs []address.Address
-	var presealDirs []string
+	var genaccs []genesis.Actor
 	var keys []*wallet.Key
+
+	var presealDirs []string
 	for i := 0; i < len(storage); i++ {
 		maddr, err := address.NewIDAddress(genesis2.MinerStart + uint64(i))
 		if err != nil {
@@ -234,7 +232,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		if err != nil {
 			return nil, nil, err
 		}
-		genm, k, err := mockstorage.PreSeal(2048, maddr, nPreseal)
+		genm, k, err := seed.PreSeal(maddr, abi.RegisteredProof_StackedDRG2KiBPoSt, 0, nGenesisPreseals, tdir, []byte("make genesis mem random"), nil)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -247,7 +245,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 
 		genaccs = append(genaccs, genesis.Actor{
 			Type:    genesis.TAccount,
-			Balance: big.NewInt(40000000000),
+			Balance: big.NewInt(5000000000000000000),
 			Meta:    (&genesis.AccountMeta{Owner: wk.Address}).ActorMeta(),
 		})
 
@@ -281,8 +279,6 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 			node.MockHost(mn),
 			node.Test(),
 
-			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
-
 			genesis,
 		)
 		if err != nil {
@@ -306,13 +302,10 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		genMiner := maddrs[i]
 		wa := genms[i].Worker
 
-		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options(
-			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(5, build.SectorSizes[0]), nil
-			}),
-			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
-			node.Unset(new(*sectorstorage.Manager)),
-		))
+		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options())
+		if err := storers[i].StorageAddLocal(ctx, presealDirs[i]); err != nil {
+			return nil, nil, err
+		}
 	}
 
 	if err := mn.LinkAll(); err != nil {
@@ -353,7 +346,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 		panic(err)
 	}
 	nic := storedcounter.New(ds, datastore.NewKey("/storage/nextid"))
-	for i := 0; i < nPreseal; i++ {
+	for i := 0; i < nGenesisPreseals; i++ {
 		nic.Next()
 	}
 	nic.Next()
@@ -387,7 +380,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	// start node
 	var minerapi api.StorageMiner
 
-	mineBlock := make(chan struct{})
+	mineBlock := make(chan func(bool))
 	// TODO: use stop
 	_, err = node.New(ctx,
 		node.StorageMiner(&minerapi),
@@ -412,9 +405,9 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 
 	err = minerapi.NetConnect(ctx, remoteAddrs)
 	require.NoError(t, err)*/
-	mineOne := func(ctx context.Context) error {
+	mineOne := func(ctx context.Context, cb func(bool)) error {
 		select {
-		case mineBlock <- struct{}{}:
+		case mineBlock <- cb:
 			return nil
 		case <-ctx.Done():
 			return ctx.Err()
