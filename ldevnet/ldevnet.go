@@ -78,8 +78,13 @@ func (ld *LocalDevnet) Close() {
 	ld.closer()
 }
 
+var PresealGenesis = -1
+
 func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
-	miners := make([]int, numMiners)
+	miners := make([]test.StorageMiner, numMiners)
+	for i := 0; i < numMiners; i++ {
+		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
+	}
 	n, sn, closer, err := rpcBuilder(1, miners)
 	if err != nil {
 		return nil, err
@@ -110,7 +115,7 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 				mine = false
 				continue
 			}
-			if err := sn[i].MineOne(context.Background()); err != nil {
+			if err := sn[i].MineOne(context.Background(), func(bool) {}); err != nil {
 				panic(err)
 			}
 			i = (i + 1) % len(miners)
@@ -144,7 +149,7 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+func rpcBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, func(), error) {
 	fullApis, storaApis, err := mockSbBuilder(nFull, storage)
 	if err != nil {
 		return nil, nil, nil, err
@@ -192,9 +197,9 @@ func rpcBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNo
 	}, nil
 }
 
-const nPreseal = 2
+const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -225,6 +230,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 	var maddrs []address.Address
 	var presealDirs []string
 	var keys []*wallet.Key
+	var pidKeys []crypto.PrivKey
 	for i := 0; i < len(storage); i++ {
 		maddr, err := address.NewIDAddress(genesis2.MinerStart + uint64(i))
 		if err != nil {
@@ -234,7 +240,13 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		if err != nil {
 			return nil, nil, err
 		}
-		genm, k, err := mockstorage.PreSeal(2048, maddr, nPreseal)
+
+		preseals := storage[i].Preseal
+		if preseals == test.PresealGenesis {
+			preseals = nGenesisPreseals
+		}
+
+		genm, k, err := mockstorage.PreSeal(2048, maddr, nGenesisPreseals)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -247,11 +259,12 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 
 		genaccs = append(genaccs, genesis.Actor{
 			Type:    genesis.TAccount,
-			Balance: big.NewInt(40000000000),
+			Balance: big.NewInt(5000000000000000000),
 			Meta:    (&genesis.AccountMeta{Owner: wk.Address}).ActorMeta(),
 		})
 
 		keys = append(keys, wk)
+		pidKeys = append(pidKeys, minersPk[i])
 		presealDirs = append(presealDirs, tdir)
 		maddrs = append(maddrs, maddr)
 		genms = append(genms, *genm)
@@ -290,12 +303,12 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		}
 	}
 
-	for i, full := range storage {
-		if full != 0 {
+	for i, def := range storage {
+		if def.Full != 0 {
 			return nil, nil, fmt.Errorf("storage nodes only supported on the first full node")
 		}
 
-		f := fulls[full]
+		f := fulls[def.Full]
 		if _, err := f.FullNode.WalletImport(ctx, &keys[i].KeyInfo); err != nil {
 			return nil, nil, err
 		}
@@ -353,7 +366,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 		panic(err)
 	}
 	nic := storedcounter.New(ds, datastore.NewKey("/storage/nextid"))
-	for i := 0; i < nPreseal; i++ {
+	for i := 0; i < nGenesisPreseals; i++ {
 		nic.Next()
 	}
 	nic.Next()
@@ -387,7 +400,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	// start node
 	var minerapi api.StorageMiner
 
-	mineBlock := make(chan struct{})
+	mineBlock := make(chan func(bool))
 	// TODO: use stop
 	_, err = node.New(ctx,
 		node.StorageMiner(&minerapi),
@@ -412,9 +425,9 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 
 	err = minerapi.NetConnect(ctx, remoteAddrs)
 	require.NoError(t, err)*/
-	mineOne := func(ctx context.Context) error {
+	mineOne := func(ctx context.Context, cb func(bool)) error {
 		select {
-		case mineBlock <- struct{}{}:
+		case mineBlock <- cb:
 			return nil
 		case <-ctx.Done():
 			return ctx.Err()
