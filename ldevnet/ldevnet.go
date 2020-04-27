@@ -11,9 +11,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/filecoin-project/lotus/storage/mockstorage"
+
 	"github.com/filecoin-project/go-fil-markets/storedcounter"
 	"github.com/filecoin-project/lotus/api/apistruct"
-	"github.com/filecoin-project/lotus/cmd/lotus-seed/seed"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -41,6 +42,9 @@ import (
 	"github.com/filecoin-project/lotus/node/modules"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
+	sectorstorage "github.com/filecoin-project/sector-storage"
+	"github.com/filecoin-project/sector-storage/ffiwrapper"
+	"github.com/filecoin-project/sector-storage/mock"
 )
 
 const (
@@ -74,8 +78,13 @@ func (ld *LocalDevnet) Close() {
 	ld.closer()
 }
 
+var PresealGenesis = -1
+
 func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
-	miners := make([]int, numMiners)
+	miners := make([]test.StorageMiner, numMiners)
+	for i := 0; i < numMiners; i++ {
+		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
+	}
 	n, sn, closer, err := rpcBuilder(1, miners)
 	if err != nil {
 		return nil, err
@@ -140,7 +149,7 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+func rpcBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, func(), error) {
 	fullApis, storaApis, err := mockSbBuilder(nFull, storage)
 	if err != nil {
 		return nil, nil, nil, err
@@ -190,7 +199,7 @@ func rpcBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNo
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -216,13 +225,12 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 
 	// PRESEAL SECTION, TRY TO REPLACE WITH BETTER IN THE FUTURE
 	// TODO: would be great if there was a better way to fake the preseals
-
 	var genms []genesis.Miner
-	var maddrs []address.Address
 	var genaccs []genesis.Actor
-	var keys []*wallet.Key
-
+	var maddrs []address.Address
 	var presealDirs []string
+	var keys []*wallet.Key
+	var pidKeys []crypto.PrivKey
 	for i := 0; i < len(storage); i++ {
 		maddr, err := address.NewIDAddress(genesis2.MinerStart + uint64(i))
 		if err != nil {
@@ -232,7 +240,13 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		if err != nil {
 			return nil, nil, err
 		}
-		genm, k, err := seed.PreSeal(maddr, abi.RegisteredProof_StackedDRG2KiBPoSt, 0, nGenesisPreseals, tdir, []byte("make genesis mem random"), nil)
+
+		preseals := storage[i].Preseal
+		if preseals == test.PresealGenesis {
+			preseals = nGenesisPreseals
+		}
+
+		genm, k, err := mockstorage.PreSeal(2048, maddr, nGenesisPreseals)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -250,6 +264,7 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		})
 
 		keys = append(keys, wk)
+		pidKeys = append(pidKeys, minersPk[i])
 		presealDirs = append(presealDirs, tdir)
 		maddrs = append(maddrs, maddr)
 		genms = append(genms, *genm)
@@ -279,6 +294,8 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 			node.MockHost(mn),
 			node.Test(),
 
+			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
+
 			genesis,
 		)
 		if err != nil {
@@ -286,12 +303,12 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		}
 	}
 
-	for i, full := range storage {
-		if full != 0 {
+	for i, def := range storage {
+		if def.Full != 0 {
 			return nil, nil, fmt.Errorf("storage nodes only supported on the first full node")
 		}
 
-		f := fulls[full]
+		f := fulls[def.Full]
 		if _, err := f.FullNode.WalletImport(ctx, &keys[i].KeyInfo); err != nil {
 			return nil, nil, err
 		}
@@ -302,10 +319,13 @@ func mockSbBuilder(nFull int, storage []int) ([]test.TestNode, []test.TestStorag
 		genMiner := maddrs[i]
 		wa := genms[i].Worker
 
-		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options())
-		if err := storers[i].StorageAddLocal(ctx, presealDirs[i]); err != nil {
-			return nil, nil, err
-		}
+		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options(
+			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
+				return mock.NewMockSectorMgr(5, build.SectorSizes[0]), nil
+			}),
+			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
+			node.Unset(new(*sectorstorage.Manager)),
+		))
 	}
 
 	if err := mn.LinkAll(); err != nil {
