@@ -13,7 +13,7 @@ import (
 
 	"github.com/filecoin-project/lotus/storage/mockstorage"
 
-	"github.com/filecoin-project/go-fil-markets/storedcounter"
+	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
@@ -246,7 +246,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			preseals = nGenesisPreseals
 		}
 
-		genm, k, err := mockstorage.PreSeal(2048, maddr, nGenesisPreseals)
+		genm, k, err := mockstorage.PreSeal(2048, maddr, preseals)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -316,10 +316,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			return nil, nil, err
 		}
 
-		genMiner := maddrs[i]
-		wa := genms[i].Worker
-
-		storers[i] = testStorageNode(ctx, wa, genMiner, minersPk[i], f, mn, node.Options(
+		storers[i] = testStorageNode(ctx, genms[i].Worker, maddrs[i], minersPk[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
 				return mock.NewMockSectorMgr(5, build.SectorSizes[0]), nil
 			}),
