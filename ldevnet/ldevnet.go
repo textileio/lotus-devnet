@@ -323,6 +323,9 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
 		))
+		if err := storers[i].StorageMiner.MarketSetPrice(ctx, types.NewInt(1000)); err != nil {
+			return nil, nil, err
+		}
 	}
 
 	if err := mn.LinkAll(); err != nil {
