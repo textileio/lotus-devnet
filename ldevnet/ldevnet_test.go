@@ -26,10 +26,10 @@ func TestMain(m *testing.M) {
 }
 
 func TestStore(t *testing.T) {
-	numMiners := []int{1, 2}
+	numMiners := []int{2}
 
-	for nm := range numMiners {
-		for i := 0; i < nm; i++ {
+	for _, nm := range numMiners {
+		for i := 1; i < nm; i++ {
 			t.Run(fmt.Sprintf("%d miners, deal with miner %d", nm, i), dealSpecificMiner(t, nm, i))
 		}
 	}

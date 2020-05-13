@@ -261,7 +261,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 
 		genaccs = append(genaccs, genesis.Actor{
 			Type:    genesis.TAccount,
-			Balance: big.NewInt(5000000000000000000),
+			Balance: big.Mul(big.NewInt(50000), types.NewInt(build.FilecoinPrecision)),
 			Meta:    (&genesis.AccountMeta{Owner: wk.Address}).ActorMeta(),
 		})
 
