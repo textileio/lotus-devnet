@@ -53,7 +53,9 @@ const (
 )
 
 func init() {
-	build.SectorSizes = []abi.SectorSize{2048}
+	saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
+		abi.RegisteredProof_StackedDRG2KiBSeal: {},
+	}
 	power.ConsensusMinerMinPower = big.NewInt(2048)
 	os.Setenv("TRUST_PARAMS", "1")
 	os.Setenv("BELLMAN_NO_GPU", "1")
@@ -318,7 +320,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 
 		storers[i] = testStorageNode(ctx, genms[i].Worker, maddrs[i], minersPk[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(5, build.SectorSizes[0]), nil
+				return mock.NewMockSectorMgr(build.DefaultSectorSize()), nil
 			}),
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),

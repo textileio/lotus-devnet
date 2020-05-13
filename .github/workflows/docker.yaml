@@ -9,6 +9,8 @@ jobs:
     name: Docker publishing
     runs-on: self-hosted
     steps:
+      - name: Clean filecoin-ffi
+        run: make clean build
       - name: Publish
         uses: docker/build-push-action@v1
         with:
