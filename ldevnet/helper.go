@@ -13,8 +13,8 @@ func init() {
 	build.InsecurePoStValidation = true
 }
 
-func CreateLocalDevnet(t *testing.T, numMiners int) (*LocalDevnet, address.Address, []address.Address, func()) {
-	dnet, err := New(numMiners, DefaultDuration)
+func CreateLocalDevnet(t *testing.T, numMiners int, bigSectors bool) (*LocalDevnet, address.Address, []address.Address, func()) {
+	dnet, err := New(numMiners, DefaultDuration, bigSectors)
 	if err != nil {
 		t.Fatal(err)
 	}

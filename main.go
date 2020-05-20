@@ -20,6 +20,7 @@ var (
 func main() {
 	pflag.Int("numminers", 1, "Number of miners in devnet")
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
+	pflag.Bool("bigsectors", false, "Use big sectors")
 	pflag.Parse()
 
 	config.SetEnvPrefix("TEXLOTUSDEVNET")
@@ -28,8 +29,9 @@ func main() {
 
 	speed := config.GetInt("speed")
 	numMiners := config.GetInt("numminers")
+	bigSectors := config.GetBool("bigsectors")
 
-	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed))
+	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors)
 	if err != nil {
 		panic(err)
 	}

@@ -56,7 +56,7 @@ const (
 func init() {
 	power.ConsensusMinerMinPower = big.NewInt(2048)
 	saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
-		abi.RegisteredProof_StackedDRG512MiBSeal: {},
+		abi.RegisteredProof_StackedDRG2KiBSeal: {},
 	}
 	verifreg.MinVerifiedDealSize = big.NewInt(256)
 	os.Setenv("TRUST_PARAMS", "1")
@@ -84,12 +84,17 @@ func (ld *LocalDevnet) Close() {
 
 var PresealGenesis = -1
 
-func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
+func New(numMiners int, blockDur time.Duration, bigSector bool) (*LocalDevnet, error) {
+	if bigSector {
+		saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
+			abi.RegisteredProof_StackedDRG512MiBSeal: {},
+		}
+	}
 	miners := make([]test.StorageMiner, numMiners)
 	for i := 0; i < numMiners; i++ {
 		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
 	}
-	n, sn, closer, err := rpcBuilder(1, miners)
+	n, sn, closer, err := rpcBuilder(1, miners, bigSector)
 	if err != nil {
 		return nil, err
 	}
@@ -153,8 +158,8 @@ func New(numMiners int, blockDur time.Duration) (*LocalDevnet, error) {
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, func(), error) {
-	fullApis, storaApis, err := mockSbBuilder(nFull, storage)
+func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -203,7 +208,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -250,7 +255,11 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			preseals = nGenesisPreseals
 		}
 
-		genm, k, err := mockstorage.PreSeal(1024*1024*512, maddr, preseals)
+		size := abi.SectorSize(2048)
+		if bigSector {
+			size = abi.SectorSize(1024 * 1024 * 512)
+		}
+		genm, k, err := mockstorage.PreSeal(size, maddr, preseals)
 		if err != nil {
 			return nil, nil, err
 		}

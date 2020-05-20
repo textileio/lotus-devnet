@@ -27,18 +27,18 @@ func TestMain(m *testing.M) {
 }
 
 func TestStore(t *testing.T) {
-	numMiners := []int{1}
+	numMiners := []int{2}
 
 	for _, nm := range numMiners {
-		for i := 0; i < nm; i++ {
-			t.Run(fmt.Sprintf("%d miners, deal with miner %d", nm, i), dealSpecificMiner(t, nm, i))
+		for i := 0; i < 1; i++ {
+			t.Run(fmt.Sprintf("%d miners, deal with miner %d", nm, i), dealSpecificMiner(t, nm, 1))
 		}
 	}
 }
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*100)
+		_, err := New(numMiners, time.Millisecond*500, true)
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
