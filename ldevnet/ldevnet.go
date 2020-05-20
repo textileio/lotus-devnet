@@ -56,7 +56,7 @@ const (
 func init() {
 	power.ConsensusMinerMinPower = big.NewInt(2048)
 	saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
-		abi.RegisteredProof_StackedDRG2KiBSeal: {},
+		abi.RegisteredProof_StackedDRG512MiBSeal: {},
 	}
 	verifreg.MinVerifiedDealSize = big.NewInt(256)
 	os.Setenv("TRUST_PARAMS", "1")
@@ -250,7 +250,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			preseals = nGenesisPreseals
 		}
 
-		genm, k, err := mockstorage.PreSeal(2048, maddr, preseals)
+		genm, k, err := mockstorage.PreSeal(1024*1024*512, maddr, preseals)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -263,7 +263,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 
 		genaccs = append(genaccs, genesis.Actor{
 			Type:    genesis.TAccount,
-			Balance: big.Mul(big.NewInt(50000), types.NewInt(build.FilecoinPrecision)),
+			Balance: big.Mul(big.NewInt(500000), types.NewInt(build.FilecoinPrecision)),
 			Meta:    (&genesis.AccountMeta{Owner: wk.Address}).ActorMeta(),
 		})
 
@@ -276,7 +276,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 	templ := &genesis.Template{
 		Accounts:  genaccs,
 		Miners:    genms,
-		Timestamp: uint64(time.Now().Unix() - 10000),
+		Timestamp: uint64(time.Now().Add(-time.Hour * 100000).Unix()),
 	}
 
 	// END PRESEAL SECTION
@@ -327,9 +327,9 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner) ([]test.TestNode, []t
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
 		))
-		if err := storers[i].StorageMiner.MarketSetPrice(ctx, types.NewInt(1000)); err != nil {
-			return nil, nil, err
-		}
+		//if err := storers[i].StorageMiner.MarketSetPrice(ctx, types.NewInt(1000)); err != nil {
+		//	return nil, nil, err
+		//}
 	}
 
 	if err := mn.LinkAll(); err != nil {
