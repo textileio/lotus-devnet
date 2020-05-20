@@ -38,7 +38,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*250)
+		_, err := New(numMiners, time.Millisecond*100)
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -71,7 +71,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 
 		r := rand.New(rand.NewSource(22))
 		for i := 0; i < 2; i++ {
-			data := make([]byte, 600)
+			data := make([]byte, 1024*1024*50)
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 			require.Nil(t, err)
@@ -82,7 +82,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			sdp := &api.StartDealParams{
 				Data:              &storagemarket.DataRef{Root: fcid},
 				Wallet:            waddr,
-				EpochPrice:        types.NewInt(1000),
+				EpochPrice:        types.NewInt(100000000),
 				MinBlocksDuration: 100,
 				Miner:             miners[concreteMiner],
 			}
