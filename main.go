@@ -21,6 +21,7 @@ func main() {
 	pflag.Int("numminers", 1, "Number of miners in devnet")
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
 	pflag.Bool("bigsectors", false, "Use big sectors")
+	pflag.String("ipfsaddr", "", "Use a remote IPFS node as blockstore")
 	pflag.Parse()
 
 	config.SetEnvPrefix("TEXLOTUSDEVNET")
@@ -30,8 +31,9 @@ func main() {
 	speed := config.GetInt("speed")
 	numMiners := config.GetInt("numminers")
 	bigSectors := config.GetBool("bigsectors")
+	ipfsAddr := config.GetString("ipfsaddr")
 
-	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors)
+	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr)
 	if err != nil {
 		panic(err)
 	}

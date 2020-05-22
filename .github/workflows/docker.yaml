@@ -4,6 +4,7 @@ on:
   push:
     branches:
         - master
+        - jsign/ipfsintegration
 jobs:
   docker:
     name: Docker publishing

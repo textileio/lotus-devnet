@@ -24,4 +24,3 @@ require (
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.1.2-0.20200522192642-6c63dd33fc6d
-
