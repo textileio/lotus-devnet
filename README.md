@@ -1,6 +1,6 @@
 # Lotus Devnet
 Runs a Lotus Devnet using a mocked _sectorbuilder_ which can be accesed as a real Lotus node through the API.
-The devnet code is always tried to be updated with Lotus `master` branch.
+The devnet code is always tried to be update with Lotus `master`.
 
 ## Run
 You can run the devnet with:
@@ -14,7 +14,7 @@ The devnet supports the following configuration:
 - `-bigsectors`: Miners will use 512Gib sector sizes. Default is _false_ (2Kib sectors)
 - `-ipfsaddr`: IPFS multiaddr to allow the client be connected to an IPFS node as a blockstorage.
 
-All flags can be specified by enviroment variables using the `TEXLOTUSDEVNET_` prefix. e.g: `TEXLOTUSDEVNET_SPEED=1000`
+All flags can be specified by environment variables using the `TEXLOTUSDEVNET_` prefix. e.g: `TEXLOTUSDEVNET_SPEED=1000`
 
 ## Docker
 The Lotus Devnet was originally thought for integration tests in CI pipelines.
