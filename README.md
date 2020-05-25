@@ -1,8 +1,6 @@
 # Lotus Devnet
 Runs a Lotus Devnet using a mocked _sectorbuilder_ which can be accesed as a real Lotus node through the API.
-This code is experimental.
-
-The devnet code is always up to date with the latest `master` Lotus branch.
+The devnet code is always tried to be updated with Lotus `master` branch.
 
 ## Run
 You can run the devnet with:
@@ -11,20 +9,24 @@ go run main.go
 ```
 
 The devnet supports the following configuration:
-- _Speed_ (`-speed`): Time in milliseconds that blocks are mined
-- _# Miners_ (`-numminers`): Amount of miners in testnet, default is 1. This feature is experimental, so don't expect to work pefectly for values greater than 1.
+- `-speed`: Time in milliseconds that blocks are mined. Default is 100ms.
+- `-numminers`: Number of miners. Default is 1. (Note: higher values is an experimental feature)
+- `-bigsectors`: Miners will use 512Gib sector sizes. Default is _false_ (2Kib sectors)
+- `-ipfsaddr`: IPFS multiaddr to allow the client be connected to an IPFS node as a blockstorage.
 
-It also supports configuration via env-vars with `TEXLOTUSDEVNET_` prefix with capitalized flag names.
+All flags can be specified by enviroment variables using the `TEXLOTUSDEVNET_` prefix. e.g: `TEXLOTUSDEVNET_SPEED=1000`
 
 ## Docker
-You can run the image locally or leverage DockerHub images.
+The Lotus Devnet was originally thought for integration tests in CI pipelines.
 
 ### Build locally
-The docker-image can be built locally with `docker build .`. 
+You can build the Docker image by running `docker build .`. 
 
 ## Public images
-Public images are pushed to DockerHub by the CI. Refer to [textile/lotus-devnet](https://hub.docker.com/repository/docker/textile/lotus-devnet/tags?page=1).
-Run example with block generation in 1.5s intervals:
+A public Docker image is hosted in DockerHub on every `master` commit.
+Refer to [textile/lotus-devnet](https://hub.docker.com/repository/docker/textile/lotus-devnet/tags?page=1).
+
+For example, running a Lotus Devnet with 1.5s block generation speed:
 ```bash
 docker run -e TEXLOTUSDEVNET_SPEED=1500 textile/lotus-devnet
 ```
