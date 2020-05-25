@@ -21,7 +21,7 @@ func main() {
 	pflag.Int("numminers", 1, "Number of miners in devnet")
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
 	pflag.Bool("bigsectors", false, "Use big sectors")
-	pflag.String("ipfsaddr", "", "Use a remote IPFS node as blockstore")
+	pflag.String("ipfsaddr", "", "IPFS multiaddr to make Lotus use an IPFS node")
 	pflag.Parse()
 
 	config.SetEnvPrefix("TEXLOTUSDEVNET")
