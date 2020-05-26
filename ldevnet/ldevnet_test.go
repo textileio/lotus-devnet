@@ -119,6 +119,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			require.Nil(t, err)
 			defer os.RemoveAll(rpath)
 
+			// Retrieve to file.
 			ref := &api.FileRef{
 				Path:  filepath.Join(rpath, "ret"),
 				IsCAR: false,
