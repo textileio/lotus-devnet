@@ -300,7 +300,6 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 		}
 
 		var err error
-		// TODO: Don't ignore stop
 		_, err = node.New(ctx,
 			node.FullAPI(&fulls[i].FullNode),
 			node.Online(),
