@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/chain/types"
-	"github.com/filecoin-project/lotus/lib/jsonrpc"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
 )
@@ -38,7 +38,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*500, true)
+		_, err := New(numMiners, time.Millisecond*500, true, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -119,7 +119,8 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			require.Nil(t, err)
 			defer os.RemoveAll(rpath)
 
-			ref := api.FileRef{
+			// Retrieve to file.
+			ref := &api.FileRef{
 				Path:  filepath.Join(rpath, "ret"),
 				IsCAR: false,
 			}

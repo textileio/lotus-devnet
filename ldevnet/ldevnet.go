@@ -28,6 +28,7 @@ import (
 	"github.com/filecoin-project/specs-actors/actors/builtin/power"
 	"github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
 
+	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 	"github.com/filecoin-project/lotus/api/test"
@@ -37,10 +38,10 @@ import (
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	genesis "github.com/filecoin-project/lotus/genesis"
-	"github.com/filecoin-project/lotus/lib/jsonrpc"
 	"github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/node"
 	"github.com/filecoin-project/lotus/node/modules"
+	"github.com/filecoin-project/lotus/node/modules/dtypes"
 	modtest "github.com/filecoin-project/lotus/node/modules/testing"
 	"github.com/filecoin-project/lotus/node/repo"
 	sectorstorage "github.com/filecoin-project/sector-storage"
@@ -84,7 +85,7 @@ func (ld *LocalDevnet) Close() {
 
 var PresealGenesis = -1
 
-func New(numMiners int, blockDur time.Duration, bigSector bool) (*LocalDevnet, error) {
+func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string) (*LocalDevnet, error) {
 	if bigSector {
 		saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
 			abi.RegisteredProof_StackedDRG512MiBSeal: {},
@@ -94,7 +95,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool) (*LocalDevnet, e
 	for i := 0; i < numMiners; i++ {
 		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
 	}
-	n, sn, closer, err := rpcBuilder(1, miners, bigSector)
+	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +159,8 @@ func New(numMiners int, blockDur time.Duration, bigSector bool) (*LocalDevnet, e
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]test.TestNode, []test.TestStorageNode, func(), error) {
-	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector)
+func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -208,7 +209,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]test.
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -299,7 +300,6 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]te
 		}
 
 		var err error
-		// TODO: Don't ignore stop
 		_, err = node.New(ctx,
 			node.FullAPI(&fulls[i].FullNode),
 			node.Online(),
@@ -310,6 +310,8 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool) ([]te
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 
 			genesis,
+			node.ApplyIf(func(s *node.Settings) bool { return len(ipfsAddr) > 0 },
+				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, true))),
 		)
 		if err != nil {
 			return nil, nil, err
