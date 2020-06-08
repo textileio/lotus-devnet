@@ -394,7 +394,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	if err != nil {
 		panic(err)
 	}
-	enc, err := actors.SerializeParams(&saminer.ChangePeerIDParams{NewID: peerid})
+	enc, err := actors.SerializeParams(&saminer.ChangePeerIDParams{NewID: abi.PeerID(peerid)})
 	if err != nil {
 		panic(err)
 	}
