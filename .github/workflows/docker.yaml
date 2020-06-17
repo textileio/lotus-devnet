@@ -4,6 +4,7 @@ on:
   push:
     branches:
         - master
+        - jsign/interop6.16.0
 jobs:
   docker:
     name: Docker publishing

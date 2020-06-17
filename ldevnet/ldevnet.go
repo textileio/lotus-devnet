@@ -56,8 +56,8 @@ const (
 
 func init() {
 	power.ConsensusMinerMinPower = big.NewInt(2048)
-	saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
-		abi.RegisteredProof_StackedDRG2KiBSeal: {},
+	saminer.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
+		abi.RegisteredSealProof_StackedDrg2KiBV1: {},
 	}
 	verifreg.MinVerifiedDealSize = big.NewInt(256)
 	os.Setenv("TRUST_PARAMS", "1")
@@ -87,8 +87,8 @@ var PresealGenesis = -1
 
 func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string) (*LocalDevnet, error) {
 	if bigSector {
-		saminer.SupportedProofTypes = map[abi.RegisteredProof]struct{}{
-			abi.RegisteredProof_StackedDRG512MiBSeal: {},
+		saminer.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
+			abi.RegisteredSealProof_StackedDrg512MiBV1: {},
 		}
 	}
 	miners := make([]test.StorageMiner, numMiners)
