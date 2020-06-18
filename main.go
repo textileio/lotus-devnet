@@ -18,6 +18,12 @@ var (
 )
 
 func main() {
+
+	err := logging.SetLogLevel("main", "INFO")
+	if err != nil {
+		panic(err)
+	}
+
 	pflag.Int("numminers", 1, "Number of miners in devnet")
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
 	pflag.Bool("bigsectors", true, "Use big sectors")
@@ -33,7 +39,9 @@ func main() {
 	bigSectors := config.GetBool("bigsectors")
 	ipfsAddr := config.GetString("ipfsaddr")
 
-	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr)
+	log.Infof("Starting devnet with speed = %v, numminers = %v, bigsectors = %v, ipfsaddr = %v", speed, numMiners, bigSectors, ipfsAddr)
+
+	_, err = ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr)
 	if err != nil {
 		panic(err)
 	}
