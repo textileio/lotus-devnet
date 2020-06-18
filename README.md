@@ -11,7 +11,7 @@ go run main.go
 The devnet supports the following configuration:
 - `-speed`: Time in milliseconds that blocks are mined. Default is 100ms.
 - `-numminers`: Number of miners. Default is 1. (Note: higher values is an experimental feature)
-- `-bigsectors`: Miners will use 512Gib sector sizes. Default is _false_ (2Kib sectors)
+- `-smallsectors`: Miners will use 2Kib sector sizes. Default is _false_ (512Gib sectors)
 - `-ipfsaddr`: IPFS multiaddr to allow the client be connected to an IPFS node as a blockstorage.
 
 All flags can be specified by environment variables using the `TEXLOTUSDEVNET_` prefix. e.g: `TEXLOTUSDEVNET_SPEED=1000`

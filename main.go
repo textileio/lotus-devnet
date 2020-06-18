@@ -20,7 +20,7 @@ var (
 func main() {
 	pflag.Int("numminers", 1, "Number of miners in devnet")
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
-	pflag.Bool("bigsectors", false, "Use big sectors")
+	pflag.Bool("smallsectors", false, "Use small sectors")
 	pflag.String("ipfsaddr", "", "IPFS multiaddr to make Lotus use an IPFS node")
 	pflag.Parse()
 
@@ -30,10 +30,10 @@ func main() {
 
 	speed := config.GetInt("speed")
 	numMiners := config.GetInt("numminers")
-	bigSectors := config.GetBool("bigsectors")
+	smallSectors := config.GetBool("smallsectors")
 	ipfsAddr := config.GetString("ipfsaddr")
 
-	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr)
+	_, err := ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), smallSectors, ipfsAddr)
 	if err != nil {
 		panic(err)
 	}

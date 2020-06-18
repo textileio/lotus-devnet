@@ -57,7 +57,7 @@ const (
 func init() {
 	power.ConsensusMinerMinPower = big.NewInt(2048)
 	saminer.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
-		abi.RegisteredSealProof_StackedDrg2KiBV1: {},
+		abi.RegisteredSealProof_StackedDrg512MiBV1: {},
 	}
 	verifreg.MinVerifiedDealSize = big.NewInt(256)
 	os.Setenv("TRUST_PARAMS", "1")
@@ -85,17 +85,17 @@ func (ld *LocalDevnet) Close() {
 
 var PresealGenesis = -1
 
-func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string) (*LocalDevnet, error) {
-	if bigSector {
+func New(numMiners int, blockDur time.Duration, smallSector bool, ipfsAddr string) (*LocalDevnet, error) {
+	if smallSector {
 		saminer.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
-			abi.RegisteredSealProof_StackedDrg512MiBV1: {},
+			abi.RegisteredSealProof_StackedDrg2KiBV1: {},
 		}
 	}
 	miners := make([]test.StorageMiner, numMiners)
 	for i := 0; i < numMiners; i++ {
 		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
 	}
-	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr)
+	n, sn, closer, err := rpcBuilder(1, miners, smallSector, ipfsAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -159,8 +159,8 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, func(), error) {
-	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr)
+func rpcBuilder(nFull int, storage []test.StorageMiner, smallSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+	fullApis, storaApis, err := mockSbBuilder(nFull, storage, smallSector, ipfsAddr)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -209,7 +209,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner, smallSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -256,9 +256,9 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 			preseals = nGenesisPreseals
 		}
 
-		size := abi.SectorSize(2048)
-		if bigSector {
-			size = abi.SectorSize(1024 * 1024 * 512)
+		size := abi.SectorSize(1024 * 1024 * 512)
+		if smallSector {
+			size = abi.SectorSize(2048)
 		}
 		genm, k, err := mockstorage.PreSeal(size, maddr, preseals)
 		if err != nil {
