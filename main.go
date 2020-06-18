@@ -13,13 +13,13 @@ import (
 )
 
 var (
-	log    = logging.Logger("main")
+	log    = logging.Logger("devnet-main")
 	config = viper.New()
 )
 
 func main() {
 
-	err := logging.SetLogLevel("main", "INFO")
+	err := logging.SetLogLevel("devnet-main", "INFO")
 	if err != nil {
 		panic(err)
 	}
