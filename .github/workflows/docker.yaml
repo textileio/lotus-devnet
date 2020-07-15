@@ -3,8 +3,7 @@ on:
   create:
   push:
     branches:
-        - master
-        - jsign/interop6.16.0
+        - butterfly-7.10.0
 jobs:
   docker:
     name: Docker publishing
