@@ -11,6 +11,7 @@ require (
 	github.com/filecoin-project/lotus v0.4.2-0.20200710025032-337c57093404
 	github.com/filecoin-project/sector-storage v0.0.0-20200709184611-f0dae546b517
 	github.com/filecoin-project/specs-actors v0.7.1
+	github.com/filecoin-project/storage-fsm v0.0.0-20200707194229-bc5e298e2b4c
 	github.com/ipfs/go-datastore v0.4.4
 	github.com/ipfs/go-log/v2 v2.1.2-0.20200626104915-0016c0b4b3e4
 	github.com/libp2p/go-libp2p v0.10.0

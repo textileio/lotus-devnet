@@ -38,7 +38,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*200, true, "")
+		_, err := New(numMiners, time.Millisecond*500, true, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -111,7 +111,6 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 				time.Sleep(time.Second)
 			}
 
-			panic(1)
 			offers, err := client.ClientFindData(ctx, fcid.Root, nil)
 			require.Nil(t, err)
 			require.Greater(t, len(offers), 0)

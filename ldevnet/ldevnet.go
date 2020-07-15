@@ -15,6 +15,7 @@ import (
 
 	"github.com/filecoin-project/go-storedcounter"
 	"github.com/filecoin-project/lotus/api/apistruct"
+	sealing "github.com/filecoin-project/storage-fsm"
 	"github.com/ipfs/go-datastore"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -129,6 +130,23 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 				panic(err)
 			}
 			i = (i + 1) % len(miners)
+			snums, err := sn[i].SectorsList(ctx)
+			if err != nil {
+				panic(err)
+			}
+
+			for _, snum := range snums {
+				si, err := sn[i].SectorsStatus(ctx, snum)
+				if err != nil {
+					panic(err)
+				}
+
+				if si.State == api.SectorState(sealing.WaitDeals) {
+					if err := sn[i].SectorStartSealing(ctx, snum); err != nil {
+						panic(err)
+					}
+				}
+			}
 		}
 	}()
 
