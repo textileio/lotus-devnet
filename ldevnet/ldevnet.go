@@ -125,7 +125,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 				mine = false
 				continue
 			}
-			if err := sn[i].MineOne(context.Background(), func(bool) {}); err != nil {
+			if err := sn[i].MineOne(context.Background(), func(bool, error) {}); err != nil {
 				panic(err)
 			}
 			i = (i + 1) % len(miners)
@@ -415,7 +415,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	// start node
 	var minerapi api.StorageMiner
 
-	mineBlock := make(chan func(bool))
+	mineBlock := make(chan func(bool, error))
 	// TODO: use stop
 	_, err = node.New(ctx,
 		node.StorageMiner(&minerapi),
@@ -440,7 +440,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 
 	err = minerapi.NetConnect(ctx, remoteAddrs)
 	require.NoError(t, err)*/
-	mineOne := func(ctx context.Context, cb func(bool)) error {
+	mineOne := func(ctx context.Context, cb func(bool, error)) error {
 		select {
 		case mineBlock <- cb:
 			return nil
