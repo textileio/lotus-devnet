@@ -125,7 +125,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 				mine = false
 				continue
 			}
-			if err := sn[i].MineOne(context.Background(), func(bool) {}); err != nil {
+			if err := sn[i].MineOne(context.Background(), func(bool, error) {}); err != nil {
 				panic(err)
 			}
 			i = (i + 1) % len(miners)
@@ -273,7 +273,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 		genaccs = append(genaccs, genesis.Actor{
 			Type:    genesis.TAccount,
-			Balance: big.Mul(big.NewInt(400_000_000_000), types.NewInt(build.FilecoinPrecision)),
+			Balance: big.Mul(big.NewInt(400_000_000_000_000), types.NewInt(build.FilecoinPrecision)),
 			Meta:    (&genesis.AccountMeta{Owner: wk.Address}).ActorMeta(),
 		})
 

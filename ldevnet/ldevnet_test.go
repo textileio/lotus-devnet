@@ -38,7 +38,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*500, true, "")
+		_, err := New(numMiners, time.Millisecond*200, true, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -77,10 +77,10 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			require.Nil(t, err)
 			fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
 			require.Nil(t, err)
-			require.True(t, fcid.Defined())
+			require.True(t, fcid.Root.Defined())
 
 			sdp := &api.StartDealParams{
-				Data:              &storagemarket.DataRef{Root: fcid},
+				Data:              &storagemarket.DataRef{Root: fcid.Root},
 				Wallet:            waddr,
 				EpochPrice:        types.NewInt(100000000),
 				MinBlocksDuration: 100,
@@ -107,11 +107,12 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 					fmt.Println("COMPLETE", di)
 					break loop
 				}
-				fmt.Println(di.State)
+				fmt.Println(storagemarket.DealStates[di.State])
 				time.Sleep(time.Second)
 			}
 
-			offers, err := client.ClientFindData(ctx, fcid)
+			panic(1)
+			offers, err := client.ClientFindData(ctx, fcid.Root, nil)
 			require.Nil(t, err)
 			require.Greater(t, len(offers), 0)
 

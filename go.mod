@@ -19,6 +19,7 @@ require (
 	github.com/spf13/viper v1.3.2
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
+
 )
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
