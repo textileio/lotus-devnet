@@ -24,3 +24,5 @@ require (
 )
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
+
+replace github.com/filecoin-project/go-fil-markets => github.com/jsign/go-fil-markets v0.4.1-0.20200716182644-ae4ece2facad
