@@ -2,6 +2,9 @@
 Runs a Lotus Devnet using a mocked _sectorbuilder_ which can be accesed as a real Lotus node through the API.
 The devnet code is always tried to be update with Lotus `master`.
 
+Note that now there're other `lotus-devnet` branches for other main networks/releases: `nerpa`, and `butterfly`.
+They basically have the same Lotus commit tag for the running devnet.
+
 ## Run
 You can run the devnet with:
 ```bash
