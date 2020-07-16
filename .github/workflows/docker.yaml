@@ -3,7 +3,7 @@ on:
   create:
   push:
     branches:
-        - butterfly-7.10.0
+        - butterfly
 jobs:
   docker:
     name: Docker publishing
