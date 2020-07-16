@@ -3,8 +3,7 @@ on:
   create:
   push:
     branches:
-        - master
-        - jsign/interop6.16.0
+        - nerpa
 jobs:
   docker:
     name: Docker publishing
