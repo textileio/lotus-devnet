@@ -255,8 +255,6 @@ github.com/filecoin-project/go-statestore v0.1.0 h1:t56reH59843TwXHkMcwyuayStBIi
 github.com/filecoin-project/go-statestore v0.1.0/go.mod h1:LFc9hD+fRxPqiHiaqUEZOinUJB4WARkRfNl10O7kTnI=
 github.com/filecoin-project/go-storedcounter v0.0.0-20200421200003-1c99c62e8a5b h1:fkRZSPrYpk42PV3/lIXiL0LHetxde7vyYYvSsttQtfg=
 github.com/filecoin-project/go-storedcounter v0.0.0-20200421200003-1c99c62e8a5b/go.mod h1:Q0GQOBtKf1oE10eSXSlhN45kDBdGvEcVOqMiffqX+N8=
-github.com/filecoin-project/lotus v0.4.2-0.20200710025032-337c57093404 h1:bBJTF6skmKwfDkf0nzQLFruAx5vL5MsKP8qtaGLOXbg=
-github.com/filecoin-project/lotus v0.4.2-0.20200710025032-337c57093404/go.mod h1:6xR0UlGed+7jvyNr3YUpo26Q3kEzaycwRsOfFd5rGLo=
 github.com/filecoin-project/sector-storage v0.0.0-20200615154852-728a47ab99d6/go.mod h1:M59QnAeA/oV+Z8oHFLoNpGMv0LZ8Rll+vHVXX7GirPM=
 github.com/filecoin-project/sector-storage v0.0.0-20200625154333-98ef8e4ef246/go.mod h1:8f0hWDzzIi1hKs4IVKH9RnDsO4LEHVz8BNat0okDOuY=
 github.com/filecoin-project/sector-storage v0.0.0-20200709184611-f0dae546b517 h1:bnYiOUDKxJtFk6jtGWSiXSYq3TeSKGx6BOjb2wa1SwQ=
@@ -704,6 +702,8 @@ github.com/jonboulle/clockwork v0.1.1-0.20190114141812-62fb9bc030d1/go.mod h1:Ii
 github.com/jrick/logrotate v1.0.0/go.mod h1:LNinyqDIJnpAur+b8yyulnQw/wDuN1+BYKlTRt3OuAQ=
 github.com/jsign/go-fil-markets v0.4.1-0.20200716182644-ae4ece2facad h1:OE0F8z7wxfEvNKuki0ghG3bl3cpX72iIyeiDiaGSq6c=
 github.com/jsign/go-fil-markets v0.4.1-0.20200716182644-ae4ece2facad/go.mod h1:VAH6h+sWuhPAsSwAS9Kecx8MI/dIjFkrLO8jJUmLWQc=
+github.com/jsign/lotus v0.4.1-0.20200717230639-a1439f33f32c h1:zoYKABlR+lz72qs1O4KwILmQl81z0FkP8KuxwnzNUUg=
+github.com/jsign/lotus v0.4.1-0.20200717230639-a1439f33f32c/go.mod h1:6xR0UlGed+7jvyNr3YUpo26Q3kEzaycwRsOfFd5rGLo=
 github.com/jsimonetti/rtnetlink v0.0.0-20190606172950-9527aa82566a/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20190830100107-3784a6c7c552/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20200117123717-f846d4f6c1f4/go.mod h1:WGuG/smIU4J/54PblvSbh+xvCZmpJnFgr3ds6Z55XMQ=
