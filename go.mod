@@ -5,13 +5,13 @@ go 1.14
 require (
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/filecoin-project/go-address v0.0.2-0.20200504173055-8b6f2fb2b3ef
-	github.com/filecoin-project/go-fil-markets v0.4.0
+	github.com/filecoin-project/go-fil-markets v0.4.1-0.20200715201050-c141144ea312
 	github.com/filecoin-project/go-jsonrpc v0.1.1-0.20200602181149-522144ab4e24
 	github.com/filecoin-project/go-storedcounter v0.0.0-20200421200003-1c99c62e8a5b
 	github.com/filecoin-project/lotus v0.4.2-0.20200710025032-337c57093404
-	github.com/filecoin-project/sector-storage v0.0.0-20200709184611-f0dae546b517
-	github.com/filecoin-project/specs-actors v0.7.1
-	github.com/filecoin-project/storage-fsm v0.0.0-20200707194229-bc5e298e2b4c
+	github.com/filecoin-project/sector-storage v0.0.0-20200717213554-a109ef9cbeab
+	github.com/filecoin-project/specs-actors v0.8.1-0.20200720115956-cd051eabf328
+	github.com/filecoin-project/storage-fsm v0.0.0-20200717125541-d575c3a5f7f2
 	github.com/ipfs/go-datastore v0.4.4
 	github.com/ipfs/go-log/v2 v2.1.2-0.20200626104915-0016c0b4b3e4
 	github.com/libp2p/go-libp2p v0.10.0
@@ -29,4 +29,4 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 replace github.com/filecoin-project/go-fil-markets => github.com/jsign/go-fil-markets v0.4.1-0.20200716182644-ae4ece2facad
 
 // Includes a fix of lotus about using IPFS as the blockstore
-replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200717230639-a1439f33f32c
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200720150254-75d3e827ad0f
