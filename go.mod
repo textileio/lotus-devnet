@@ -26,7 +26,10 @@ require (
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 // Includes a fix of go-fil-markets choosing wrong wallet address
-replace github.com/filecoin-project/go-fil-markets => github.com/jsign/go-fil-markets v0.4.1-0.20200716182644-ae4ece2facad
+replace github.com/filecoin-project/go-fil-markets => github.com/jsign/go-fil-markets v0.4.1-0.20200720192331-a45d25f87ec3
 
 // Includes a fix of lotus about using IPFS as the blockstore
 replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200720150254-75d3e827ad0f
+
+// Includes a fix for multiple pieces in a sector in a mocked sectorbuilder.
+replace github.com/filecoin-project/sector-storage => github.com/filecoin-project/sector-storage v0.0.0-20200720211632-4bb48d211ff5
