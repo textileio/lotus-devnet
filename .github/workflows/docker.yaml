@@ -3,7 +3,7 @@ on:
   create:
   push:
     branches:
-        - butterfly
+        - ntwk-calibration
 jobs:
   docker:
     name: Docker publishing
