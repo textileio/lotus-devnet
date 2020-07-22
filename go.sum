@@ -271,8 +271,8 @@ github.com/filecoin-project/specs-actors v0.8.1-0.20200720115956-cd051eabf328 h1
 github.com/filecoin-project/specs-actors v0.8.1-0.20200720115956-cd051eabf328/go.mod h1:0+CxQ5Jeii3522irTvhKRDpr4GG1bj5Erq3p/d38DzY=
 github.com/filecoin-project/specs-storage v0.1.1-0.20200622113353-88a9704877ea h1:iixjULRQFPn7Q9KlIqfwLJnlAXO10bbkI+xy5GKGdLY=
 github.com/filecoin-project/specs-storage v0.1.1-0.20200622113353-88a9704877ea/go.mod h1:Pr5ntAaxsh+sLG/LYiL4tKzvA83Vk5vLODYhfNwOg7k=
-github.com/filecoin-project/storage-fsm v0.0.0-20200717125541-d575c3a5f7f2 h1:A9zUXOMuVnSTp9a0i0KtHkB05hA8mRWVLls6Op9Czuo=
-github.com/filecoin-project/storage-fsm v0.0.0-20200717125541-d575c3a5f7f2/go.mod h1:1CGbd11KkHuyWPT+xwwCol1zl/jnlpiKD2L4fzKxaiI=
+github.com/filecoin-project/storage-fsm v0.0.0-20200720190000-2cfe2fe3c334 h1:gRp8IlJ3XDYuOUFvncmlCI6HtuK61W2wE1aEqgj4opA=
+github.com/filecoin-project/storage-fsm v0.0.0-20200720190000-2cfe2fe3c334/go.mod h1:1CGbd11KkHuyWPT+xwwCol1zl/jnlpiKD2L4fzKxaiI=
 github.com/flynn/go-shlex v0.0.0-20150515145356-3f9db97f8568/go.mod h1:xEzjJPgXI435gkrCt3MPfRiAkVrwSbHsst4LCFVfpJc=
 github.com/flynn/noise v0.0.0-20180327030543-2492fe189ae6 h1:u/UEqS66A5ckRmS4yNpjmVH56sVtS/RfclBAYocb4as=
 github.com/flynn/noise v0.0.0-20180327030543-2492fe189ae6/go.mod h1:1i71OnUq3iUe1ma7Lr6yG6/rjvM3emb6yoL7xLFzcVQ=
@@ -706,8 +706,8 @@ github.com/jonboulle/clockwork v0.1.1-0.20190114141812-62fb9bc030d1/go.mod h1:Ii
 github.com/jrick/logrotate v1.0.0/go.mod h1:LNinyqDIJnpAur+b8yyulnQw/wDuN1+BYKlTRt3OuAQ=
 github.com/jsign/go-fil-markets v0.4.1-0.20200720192331-a45d25f87ec3 h1:e0rJc1dHr93aV5ybV73yb0ep1ykZF73jz6xWrxXiqHw=
 github.com/jsign/go-fil-markets v0.4.1-0.20200720192331-a45d25f87ec3/go.mod h1:MvrpKOiETu39e9H167gdQzdzLNcvHsUp48UkXqPSdtU=
-github.com/jsign/lotus v0.4.1-0.20200720150254-75d3e827ad0f h1:da84A3Ksd+3F/IXHfPRs+IAkqEFrQTzONGVCGkIiFKE=
-github.com/jsign/lotus v0.4.1-0.20200720150254-75d3e827ad0f/go.mod h1:rC9MrgXRjxaPmwdnoLJ2s6FgPv1aMDTttC2IqCFRrmk=
+github.com/jsign/lotus v0.4.1-0.20200722153423-50b4126e7b20 h1:L8K5Gh0nR+egb5wAZNeufbesgcpVxdMU0A/tTpkx52E=
+github.com/jsign/lotus v0.4.1-0.20200722153423-50b4126e7b20/go.mod h1:jubu0DGUMhIy/0l5HZNzKXgANucmSTLXLUAhVvVrj58=
 github.com/jsimonetti/rtnetlink v0.0.0-20190606172950-9527aa82566a/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20190830100107-3784a6c7c552/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20200117123717-f846d4f6c1f4/go.mod h1:WGuG/smIU4J/54PblvSbh+xvCZmpJnFgr3ds6Z55XMQ=

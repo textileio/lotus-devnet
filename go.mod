@@ -11,7 +11,7 @@ require (
 	github.com/filecoin-project/lotus v0.4.2-0.20200721014412-b84030b3bdf1
 	github.com/filecoin-project/sector-storage v0.0.0-20200717213554-a109ef9cbeab
 	github.com/filecoin-project/specs-actors v0.8.1-0.20200720115956-cd051eabf328
-	github.com/filecoin-project/storage-fsm v0.0.0-20200717125541-d575c3a5f7f2
+	github.com/filecoin-project/storage-fsm v0.0.0-20200720190000-2cfe2fe3c334
 	github.com/ipfs/go-datastore v0.4.4
 	github.com/ipfs/go-log/v2 v2.1.2-0.20200626104915-0016c0b4b3e4
 	github.com/libp2p/go-libp2p v0.10.0
@@ -29,7 +29,7 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 replace github.com/filecoin-project/go-fil-markets => github.com/jsign/go-fil-markets v0.4.1-0.20200720192331-a45d25f87ec3
 
 // Includes a fix of lotus about using IPFS as the blockstore
-replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200720150254-75d3e827ad0f
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200722153423-50b4126e7b20
 
 // Includes a fix for multiple pieces in a sector in a mocked sectorbuilder.
 replace github.com/filecoin-project/sector-storage => github.com/filecoin-project/sector-storage v0.0.0-20200720211632-4bb48d211ff5
