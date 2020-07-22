@@ -123,30 +123,40 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 		for mine {
 			time.Sleep(blockDur)
 			if ctx.Err() != nil {
+				panic("context cancelled")
 				mine = false
 				continue
 			}
 			if err := sn[i].MineOne(context.Background(), func(bool, error) {}); err != nil {
 				panic(err)
 			}
-			i = (i + 1) % len(miners)
-			snums, err := sn[i].SectorsList(ctx)
-			if err != nil {
-				panic(err)
-			}
 
-			for _, snum := range snums {
-				si, err := sn[i].SectorsStatus(ctx, snum)
+			i = (i + 1) % len(miners)
+		}
+	}()
+
+	go func() {
+		for {
+			for i := 0; i < numMiners; i++ {
+				snums, err := sn[i].SectorsList(ctx)
 				if err != nil {
 					panic(err)
 				}
-
-				if si.State == api.SectorState(sealing.WaitDeals) {
-					if err := sn[i].SectorStartSealing(ctx, snum); err != nil {
+				for _, snum := range snums {
+					si, err := sn[i].SectorsStatus(ctx, snum)
+					if err != nil {
 						panic(err)
+					}
+
+					if si.State == api.SectorState(sealing.WaitDeals) {
+						if err := sn[i].SectorStartSealing(ctx, snum); err != nil {
+							panic(err)
+
+						}
 					}
 				}
 			}
+			time.Sleep(time.Second)
 		}
 	}()
 
@@ -356,9 +366,6 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
 		))
-		//if err := storers[i].StorageMiner.MarketSetPrice(ctx, types.NewInt(1000)); err != nil {
-		//	return nil, nil, err
-		//}
 	}
 
 	if err := mn.LinkAll(); err != nil {
@@ -398,11 +405,17 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	if err != nil {
 		panic(err)
 	}
-	nic := storedcounter.New(ds, datastore.NewKey("/storage/nextid"))
+	nic := storedcounter.New(ds, datastore.NewKey(modules.StorageCounterDSPrefix))
 	for i := 0; i < nGenesisPreseals; i++ {
-		nic.Next()
+		_, err := nic.Next()
+		if err != nil {
+			panic(err)
+		}
 	}
-	nic.Next()
+	_, err = nic.Next()
+	if err != nil {
+		panic(err)
+	}
 
 	err = lr.Close()
 	if err != nil {
@@ -423,7 +436,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 		Params:   enc,
 		Value:    types.NewInt(0),
 		GasPrice: types.NewInt(0),
-		GasLimit: 1000000,
+		GasLimit: 0,
 	}
 
 	_, err = tnd.MpoolPushMessage(ctx, msg)
