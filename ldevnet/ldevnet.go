@@ -347,6 +347,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 	}
 
 	for i, def := range storage {
+		minerID := abi.ActorID(genesis2.MinerStart + uint64(i))
 		if def.Full != 0 {
 			return nil, nil, fmt.Errorf("storage nodes only supported on the first full node")
 		}
@@ -359,9 +360,17 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 			return nil, nil, err
 		}
 
+		sectors := make([]abi.SectorID, len(genms[i].Sectors))
+		for i, sector := range genms[i].Sectors {
+			sectors[i] = abi.SectorID{
+				Miner:  minerID,
+				Number: sector.SectorID,
+			}
+		}
+
 		storers[i] = testStorageNode(ctx, genms[i].Worker, maddrs[i], minersPk[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(build.DefaultSectorSize()), nil
+				return mock.NewMockSectorMgr(build.DefaultSectorSize(), sectors), nil
 			}),
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),

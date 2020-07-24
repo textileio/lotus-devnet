@@ -22,11 +22,11 @@ import (
 
 func TestMain(m *testing.M) {
 	//logging.SetAllLoggers(logging.LevelDebug)
-	logging.SetLogLevel("miner", "ERROR")
-	logging.SetLogLevel("chainstore", "ERROR")
-	logging.SetLogLevel("chain", "ERROR")
-	logging.SetLogLevel("sub", "ERROR")
-	logging.SetLogLevel("storageminer", "ERROR")
+	//logging.SetLogLevel("miner", "ERROR")
+	//logging.SetLogLevel("chainstore", "ERROR")
+	//logging.SetLogLevel("chain", "ERROR")
+	//logging.SetLogLevel("sub", "ERROR")
+	//logging.SetLogLevel("storageminer", "ERROR")
 	_ = logging.ErrNoSuchLogger
 	os.Exit(m.Run())
 }
@@ -43,7 +43,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*100, true, "")
+		_, err := New(numMiners, time.Millisecond*400, true, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -75,7 +75,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		require.Nil(t, err)
 
 		r := rand.New(rand.NewSource(22))
-		for i := 0; i < 2; i++ {
+		for i := 0; i < 3; i++ {
 			data := make([]byte, 50*1024*1024)
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
