@@ -15,6 +15,7 @@ import (
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/apistruct"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
@@ -85,10 +86,13 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			require.True(t, fcid.Root.Defined())
 
 			sdp := &api.StartDealParams{
-				Data:              &storagemarket.DataRef{Root: fcid.Root},
+				Data: &storagemarket.DataRef{
+					TransferType: storagemarket.TTGraphsync,
+					Root:         fcid.Root,
+				},
 				Wallet:            waddr,
 				EpochPrice:        types.NewInt(100000000),
-				MinBlocksDuration: 100,
+				MinBlocksDuration: uint64(build.MinDealDuration),
 				Miner:             miners[concreteMiner],
 			}
 			deal, err := client.ClientStartDeal(ctx, sdp)
