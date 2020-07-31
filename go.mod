@@ -25,6 +25,8 @@ require (
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
+replace github.com/supranational/blst => github.com/supranational/blst v0.1.2-alpha.1
+
 // Includes a fix for multiple pieces in a sector in a mocked sectorbuilder.
 // jsign/9377cbpatched = sector-storage@7153e1patched plus a patch commit for big sectors.
 replace github.com/filecoin-project/sector-storage => github.com/jsign/sector-storage v0.0.0-20200731221342-40fb40aac455
