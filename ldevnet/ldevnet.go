@@ -346,7 +346,9 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 			genesis,
 			node.ApplyIf(func(s *node.Settings) bool { return len(ipfsAddr) > 0 },
-				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, true))),
+				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr)),
+				node.Override(new(dtypes.ClientRetrievalStoreManager), modules.ClientBlockstoreRetrievalStoreManager),
+			),
 		)
 		if err != nil {
 			return nil, nil, err
