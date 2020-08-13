@@ -470,7 +470,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 		Value:  types.NewInt(0),
 	}
 
-	_, err = tnd.MpoolPushMessage(ctx, msg)
+	_, err = tnd.MpoolPushMessage(ctx, msg, nil)
 	if err != nil {
 		panic(err)
 	}
