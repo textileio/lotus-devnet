@@ -322,7 +322,7 @@ func generateFakePoSt(sectorInfo []abi.SectorInfo, rpt func(abi.RegisteredSealPr
 }
 
 func (mgr *SectorMgr) ReadPiece(ctx context.Context, w io.Writer, sectorID abi.SectorID, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, randomness abi.SealRandomness, c cid.Cid) error {
-	if len(mgr.sectors[sectorID].pieces) > 1 || offset != 0 {
+	if offset != 0 {
 		panic("implme")
 	}
 
