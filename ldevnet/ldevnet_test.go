@@ -44,7 +44,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*400, true, "")
+		_, err := New(numMiners, time.Millisecond*100, false, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -77,7 +77,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 
 		r := rand.New(rand.NewSource(22))
 		for i := 0; i < 3; i++ {
-			data := make([]byte, 50*1024*1024)
+			data := make([]byte, 1600)
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 			require.Nil(t, err)
@@ -133,8 +133,11 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 				Path:  filepath.Join(rpath, "ret"),
 				IsCAR: false,
 			}
-			err = client.ClientRetrieve(ctx, offers[0].Order(waddr), ref)
+			updates, err := client.ClientRetrieve(ctx, offers[0].Order(waddr), ref)
 			require.Nil(t, err)
+			for range updates {
+				require.NoError(t, err)
+			}
 
 			rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 			require.Nil(t, err)
