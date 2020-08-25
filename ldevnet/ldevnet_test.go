@@ -15,6 +15,7 @@ import (
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/apistruct"
+	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/stretchr/testify/require"
@@ -22,23 +23,28 @@ import (
 
 func TestMain(m *testing.M) {
 	//logging.SetAllLoggers(logging.LevelDebug)
+	//logging.SetLogLevel("miner", "ERROR")
+	//logging.SetLogLevel("chainstore", "ERROR")
+	//logging.SetLogLevel("chain", "ERROR")
+	//logging.SetLogLevel("sub", "ERROR")
+	//logging.SetLogLevel("storageminer", "ERROR")
 	_ = logging.ErrNoSuchLogger
 	os.Exit(m.Run())
 }
 
 func TestStore(t *testing.T) {
-	numMiners := []int{2}
+	numMiners := []int{1}
 
 	for _, nm := range numMiners {
 		for i := 0; i < 1; i++ {
-			t.Run(fmt.Sprintf("%d miners, deal with miner %d", nm, i), dealSpecificMiner(t, nm, 1))
+			t.Run(fmt.Sprintf("%d miners, deal with miner %d", nm, i), dealSpecificMiner(t, nm, 0))
 		}
 	}
 }
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*500, true, "")
+		_, err := New(numMiners, time.Millisecond*100, false, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
@@ -70,26 +76,29 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		require.Nil(t, err)
 
 		r := rand.New(rand.NewSource(22))
-		for i := 0; i < 2; i++ {
-			data := make([]byte, 1024*1024*50)
+		for i := 0; i < 1; i++ {
+			data := make([]byte, 1600)
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 			require.Nil(t, err)
 			fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
 			require.Nil(t, err)
-			require.True(t, fcid.Defined())
+			require.True(t, fcid.Root.Defined())
 
 			sdp := &api.StartDealParams{
-				Data:              &storagemarket.DataRef{Root: fcid},
+				Data: &storagemarket.DataRef{
+					TransferType: storagemarket.TTGraphsync,
+					Root:         fcid.Root,
+				},
 				Wallet:            waddr,
 				EpochPrice:        types.NewInt(100000000),
-				MinBlocksDuration: 100,
+				MinBlocksDuration: uint64(build.MinDealDuration),
 				Miner:             miners[concreteMiner],
 			}
 			deal, err := client.ClientStartDeal(ctx, sdp)
 			require.Nil(t, err)
 
-			time.Sleep(time.Second)
+			time.Sleep(time.Second / 2)
 
 		loop:
 			for {
@@ -107,11 +116,10 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 					fmt.Println("COMPLETE", di)
 					break loop
 				}
-				fmt.Println(di.State)
+				fmt.Println(storagemarket.DealStates[di.State])
 				time.Sleep(time.Second)
 			}
-
-			offers, err := client.ClientFindData(ctx, fcid)
+			offers, err := client.ClientFindData(ctx, fcid.Root, nil)
 			require.Nil(t, err)
 			require.Greater(t, len(offers), 0)
 
