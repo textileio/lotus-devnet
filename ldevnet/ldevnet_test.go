@@ -48,7 +48,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
-		cc, err := jsonrpc.NewMergeClient("ws://127.0.0.1:7777/rpc/v0", "Filecoin",
+		cc, err := jsonrpc.NewMergeClient(context.Background(), "ws://127.0.0.1:7777/rpc/v0", "Filecoin",
 			[]interface{}{
 				&client.Internal,
 				&client.CommonStruct.Internal,

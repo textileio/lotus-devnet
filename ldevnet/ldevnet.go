@@ -214,7 +214,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr
 		}()
 		var err error
 		time.Sleep(time.Second)
-		fulls[i].FullNode, _, err = client.NewFullNodeRPC("ws://127.0.0.1:7777", nil)
+		fulls[i].FullNode, _, err = client.NewFullNodeRPC(context.Background(), "ws://127.0.0.1:7777", nil)
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -227,7 +227,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr
 		closers = append(closers, func() { testServ.Close() })
 
 		var err error
-		storers[i].StorageMiner, _, err = client.NewStorageMinerRPC("ws://"+testServ.Listener.Addr().String(), nil)
+		storers[i].StorageMiner, _, err = client.NewStorageMinerRPC(context.Background(), "ws://"+testServ.Listener.Addr().String(), nil)
 		if err != nil {
 			return nil, nil, nil, err
 		}
