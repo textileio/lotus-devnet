@@ -119,7 +119,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 	}
 	var mineNext = miner2.MineReq{
 		InjectNulls: 0,
-		Done:        func(bool, error) {},
+		Done:        func(bool, abi.ChainEpoch, error) {},
 	}
 	go func() {
 		i := 0
@@ -389,17 +389,65 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 		var wait sync.Mutex
 		wait.Lock()
 
-		storers[0].MineOne(ctx, miner2.MineReq{Done: func(bool, error) {
+		MineUntilBlock(ctx, fulls[0], storers[0], func(abi.ChainEpoch) {
 			wait.Unlock()
-		}})
+		})
 		wait.Lock()
-		storers[0].MineOne(ctx, miner2.MineReq{Done: func(bool, error) {
+		MineUntilBlock(ctx, fulls[0], storers[0], func(abi.ChainEpoch) {
 			wait.Unlock()
-		}})
+		})
 		wait.Lock()
 	}
 
 	return fulls, storers, nil
+}
+
+func MineUntilBlock(ctx context.Context, fn test.TestNode, sn test.TestStorageNode, cb func(abi.ChainEpoch)) {
+	for i := 0; i < 1000; i++ {
+		var success bool
+		var err error
+		var epoch abi.ChainEpoch
+		wait := make(chan struct{})
+		mineErr := sn.MineOne(ctx, miner2.MineReq{
+			Done: func(win bool, ep abi.ChainEpoch, e error) {
+				success = win
+				err = e
+				epoch = ep
+				wait <- struct{}{}
+			},
+		})
+		if mineErr != nil {
+			panic(mineErr)
+		}
+		<-wait
+		if err != nil {
+			panic(err)
+		}
+		if success {
+			// Wait until it shows up on the given full nodes ChainHead
+			nloops := 50
+			for i := 0; i < nloops; i++ {
+				ts, err := fn.ChainHead(ctx)
+				if err != nil {
+					panic(err)
+				}
+				if ts.Height() == epoch {
+					break
+				}
+				if i == nloops-1 {
+					panic(err)
+				}
+				time.Sleep(time.Millisecond * 10)
+			}
+
+			if cb != nil {
+				cb(epoch)
+			}
+			return
+		}
+		fmt.Printf("did not mine block, trying again %v", i)
+	}
+	panic("failed to mine 1000 times in a row...")
 }
 
 func testStorageNode(ctx context.Context, waddr address.Address, act address.Address, pk crypto.PrivKey, tnd test.TestNode, mn mocknet.Mocknet, opts node.Option) test.TestStorageNode {

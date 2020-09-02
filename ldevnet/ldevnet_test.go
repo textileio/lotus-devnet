@@ -44,7 +44,7 @@ func TestStore(t *testing.T) {
 
 func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*testing.T) {
 	return func(t *testing.T) {
-		_, err := New(numMiners, time.Millisecond*100, false, "")
+		_, err := New(numMiners, time.Millisecond*100, true, "")
 		require.Nil(t, err)
 
 		var client apistruct.FullNodeStruct
