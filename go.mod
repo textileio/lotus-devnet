@@ -29,6 +29,6 @@ require (
 
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
-replace github.com/supranational/blst => github.com/supranational/blst v0.1.2-alpha.1
+replace github.com/supranational/blst => ./extern/fil-blst/blst
 
-//replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200925143422-2f0854cad509
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20200925143422-2f0854cad509

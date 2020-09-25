@@ -77,7 +77,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 
 		r := rand.New(rand.NewSource(22))
 		for i := 0; i < 1; i++ {
-			data := make([]byte, 1600)
+			data := make([]byte, 100*1024*1024)
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 			require.Nil(t, err)
