@@ -2,10 +2,12 @@
 Runs a Lotus Devnet using a mocked _sectorbuilder_ which can be accesed as a real Lotus node through the API.
 The devnet code is always tried to be update with Lotus latest `master` tag.
 
-## Run
-You can run the devnet with:
+## Compile & Run
 ```bash
-go run main.go
+make clean
+CGO_CFLAGS="-D__BLST_PORTABLE__" make
+go build -o lotus-devnet main.go
+./lotus-devnet
 ```
 
 The devnet supports the following configuration:
@@ -15,6 +17,8 @@ The devnet supports the following configuration:
 - `-ipfsaddr`: IPFS multiaddr to allow the client be connected to an IPFS node as a blockstorage.
 
 All flags can be specified by environment variables using the `TEXLOTUSDEVNET_` prefix. e.g: `TEXLOTUSDEVNET_SPEED=1000`
+
+*Important:* The API will be listening on port 7777 (not in 1234 which is the usual default).
 
 ## Docker
 The Lotus Devnet was originally thought for integration tests in CI pipelines.
