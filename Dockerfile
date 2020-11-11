@@ -1,5 +1,5 @@
 FROM golang:1.14 as builder
-RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev jq
+RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev jq hwloc libhwloc-dev
 
 WORKDIR /tmp
 RUN curl https://sh.rustup.rs -sSf > rustup.sh
