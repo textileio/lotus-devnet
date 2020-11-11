@@ -29,4 +29,4 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/supranational/blst => ./extern/blst
 
-replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201111145452-7e4e87eec1a0
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201111193528-8fe1e451a009
