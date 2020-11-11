@@ -37,6 +37,7 @@ import (
 	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -64,6 +65,9 @@ func init() {
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
+	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
+	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
+	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
 	os.Setenv("TRUST_PARAMS", "1")
 	os.Setenv("BELLMAN_NO_GPU", "1")
 }
@@ -313,6 +317,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 	templ := &genesis.Template{
 		Accounts:         genaccs,
 		Miners:           genms,
+		NetworkName:      "test",
 		Timestamp:        uint64(time.Now().Add(-time.Hour * 100000).Unix()),
 		VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 		RemainderAccount: gen.DefaultRemainderAccountActor,
