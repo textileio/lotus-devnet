@@ -18,6 +18,7 @@ RUN GOOS=linux go build -o local-devnet main.go  && \
 go run github.com/GeertJohan/go.rice/rice append --exec local-devnet -i ./build
 
 FROM ubuntu
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev hwloc libhwloc-dev
 COPY --from=builder /app/local-devnet /app/local-devnet
 WORKDIR /app 
