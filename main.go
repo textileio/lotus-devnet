@@ -28,6 +28,7 @@ func main() {
 	pflag.Int("speed", ldevnet.DefaultDurationMs, "Chain speed block creation in ms")
 	pflag.Bool("bigsectors", true, "Use big sectors")
 	pflag.String("ipfsaddr", "", "IPFS multiaddr to make Lotus use an IPFS node")
+	pflag.Bool("onlinemode", false, "Use IPFS node in online mode")
 	pflag.Parse()
 
 	config.SetEnvPrefix("TEXLOTUSDEVNET")
@@ -38,10 +39,11 @@ func main() {
 	numMiners := config.GetInt("numminers")
 	bigSectors := config.GetBool("bigsectors")
 	ipfsAddr := config.GetString("ipfsaddr")
+	onlineMode := config.GetBool("onlinemode")
 
 	log.Infof("Starting devnet with speed = %v, numminers = %v, bigsectors = %v, ipfsaddr = %v", speed, numMiners, bigSectors, ipfsAddr)
 
-	_, err = ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr)
+	_, err = ldevnet.New(numMiners, time.Millisecond*time.Duration(speed), bigSectors, ipfsAddr, onlineMode)
 	if err != nil {
 		panic(err)
 	}

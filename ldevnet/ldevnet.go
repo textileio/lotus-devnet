@@ -93,7 +93,7 @@ func (ld *LocalDevnet) Close() {
 
 var PresealGenesis = -1
 
-func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string) (*LocalDevnet, error) {
+func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string, onlineMode bool) (*LocalDevnet, error) {
 	if bigSector {
 		policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg512MiBV1)
 	}
@@ -101,7 +101,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 	for i := 0; i < numMiners; i++ {
 		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
 	}
-	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr)
+	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr, onlineMode)
 	if err != nil {
 		return nil, err
 	}
@@ -197,8 +197,8 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, func(), error) {
-	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr)
+func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string, onlineMode bool) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr, onlineMode)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -247,7 +247,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string, onlineMode bool) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -345,7 +345,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 			genesis,
 			node.ApplyIf(func(s *node.Settings) bool { return len(ipfsAddr) > 0 },
-				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, true)),
+				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, onlineMode)),
 				node.Override(new(dtypes.ClientRetrievalStoreManager), modules.ClientBlockstoreRetrievalStoreManager),
 			),
 		)
