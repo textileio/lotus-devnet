@@ -4,7 +4,6 @@ on:
   push:
     branches:
         - master
-        - jsign/uup
 jobs:
   docker:
     name: Docker publishing
