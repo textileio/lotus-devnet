@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	miner2 "github.com/filecoin-project/lotus/miner"
+	lotusminer "github.com/filecoin-project/lotus/miner"
 	"github.com/filecoin-project/lotus/storage/mockstorage"
 
 	"github.com/filecoin-project/go-storedcounter"
@@ -26,9 +26,7 @@ import (
 	"github.com/filecoin-project/go-state-types/abi"
 	"github.com/filecoin-project/go-state-types/big"
 	"github.com/filecoin-project/specs-actors/actors/builtin"
-	"github.com/filecoin-project/specs-actors/actors/builtin/miner"
-	"github.com/filecoin-project/specs-actors/actors/builtin/power"
-	"github.com/filecoin-project/specs-actors/actors/builtin/verifreg"
+	miner2 "github.com/filecoin-project/specs-actors/v2/actors/builtin/miner"
 
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
@@ -36,8 +34,10 @@ import (
 	"github.com/filecoin-project/lotus/api/test"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/actors"
+	"github.com/filecoin-project/lotus/chain/actors/policy"
 	"github.com/filecoin-project/lotus/chain/gen"
 	genesis2 "github.com/filecoin-project/lotus/chain/gen/genesis"
+	"github.com/filecoin-project/lotus/chain/messagepool"
 	"github.com/filecoin-project/lotus/chain/types"
 	"github.com/filecoin-project/lotus/chain/wallet"
 	sectorstorage "github.com/filecoin-project/lotus/extern/sector-storage"
@@ -57,11 +57,17 @@ const (
 )
 
 func init() {
-	power.ConsensusMinerMinPower = big.NewInt(2048)
-	miner.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
-		abi.RegisteredSealProof_StackedDrg2KiBV1: {},
-	}
-	verifreg.MinVerifiedDealSize = big.NewInt(256)
+	//power.ConsensusMinerMinPower = big.NewInt(2048)
+	//miner2.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
+	//abi.RegisteredSealProof_StackedDrg2KiBV1: {},
+	//}
+	//verifreg.MinVerifiedDealSize = big.NewInt(256)
+	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
+	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
+	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
+	messagepool.HeadChangeCoalesceMinDelay = time.Microsecond
+	messagepool.HeadChangeCoalesceMaxDelay = 2 * time.Microsecond
+	messagepool.HeadChangeCoalesceMergeInterval = 100 * time.Nanosecond
 	os.Setenv("TRUST_PARAMS", "1")
 	os.Setenv("BELLMAN_NO_GPU", "1")
 }
@@ -87,17 +93,15 @@ func (ld *LocalDevnet) Close() {
 
 var PresealGenesis = -1
 
-func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string) (*LocalDevnet, error) {
+func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string, onlineMode bool) (*LocalDevnet, error) {
 	if bigSector {
-		miner.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
-			abi.RegisteredSealProof_StackedDrg512MiBV1: {},
-		}
+		policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg512MiBV1)
 	}
 	miners := make([]test.StorageMiner, numMiners)
 	for i := 0; i < numMiners; i++ {
 		miners[i] = test.StorageMiner{Full: 0, Preseal: PresealGenesis}
 	}
-	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr)
+	n, sn, closer, err := rpcBuilder(1, miners, bigSector, ipfsAddr, onlineMode)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +121,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 		}
 		time.Sleep(time.Second)
 	}
-	var mineNext = miner2.MineReq{
+	var mineNext = lotusminer.MineReq{
 		InjectNulls: 0,
 		Done:        func(bool, abi.ChainEpoch, error) {},
 	}
@@ -193,8 +197,8 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string)
 	}, nil
 }
 
-func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, func(), error) {
-	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr)
+func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string, onlineMode bool) ([]test.TestNode, []test.TestStorageNode, func(), error) {
+	fullApis, storaApis, err := mockSbBuilder(nFull, storage, bigSector, ipfsAddr, onlineMode)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -243,7 +247,7 @@ func rpcBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr
 
 const nGenesisPreseals = 2
 
-func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string) ([]test.TestNode, []test.TestStorageNode, error) {
+func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsAddr string, onlineMode bool) ([]test.TestNode, []test.TestStorageNode, error) {
 	ctx := context.Background()
 	mn := mocknet.New(ctx)
 
@@ -313,6 +317,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 	templ := &genesis.Template{
 		Accounts:         genaccs,
 		Miners:           genms,
+		NetworkName:      "test",
 		Timestamp:        uint64(time.Now().Add(-time.Hour * 100000).Unix()),
 		VerifregRootKey:  gen.DefaultVerifregRootkeyActor,
 		RemainderAccount: gen.DefaultRemainderAccountActor,
@@ -340,7 +345,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 			genesis,
 			node.ApplyIf(func(s *node.Settings) bool { return len(ipfsAddr) > 0 },
-				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr)),
+				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, onlineMode)),
 				node.Override(new(dtypes.ClientRetrievalStoreManager), modules.ClientBlockstoreRetrievalStoreManager),
 			),
 		)
@@ -373,7 +378,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 		storers[i] = testStorageNode(ctx, genms[i].Worker, maddrs[i], minersPk[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(build.DefaultSectorSize(), sectors), nil
+				return mock.NewMockSectorMgr(policy.GetDefaultSectorSize(), sectors), nil
 			}),
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
@@ -408,7 +413,7 @@ func MineUntilBlock(ctx context.Context, fn test.TestNode, sn test.TestStorageNo
 		var err error
 		var epoch abi.ChainEpoch
 		wait := make(chan struct{})
-		mineErr := sn.MineOne(ctx, miner2.MineReq{
+		mineErr := sn.MineOne(ctx, lotusminer.MineReq{
 			Done: func(win bool, ep abi.ChainEpoch, e error) {
 				success = win
 				err = e
@@ -500,7 +505,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	if err != nil {
 		panic(err)
 	}
-	enc, err := actors.SerializeParams(&miner.ChangePeerIDParams{NewID: abi.PeerID(peerid)})
+	enc, err := actors.SerializeParams(&miner2.ChangePeerIDParams{NewID: abi.PeerID(peerid)})
 	if err != nil {
 		panic(err)
 	}
@@ -519,7 +524,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 	// start node
 	var minerapi api.StorageMiner
 
-	mineBlock := make(chan miner2.MineReq)
+	mineBlock := make(chan lotusminer.MineReq)
 	// TODO: use stop
 	_, err = node.New(ctx,
 		node.StorageMiner(&minerapi),
@@ -530,7 +535,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 		node.MockHost(mn),
 
 		node.Override(new(api.FullNode), tnd),
-		node.Override(new(*miner2.Miner), miner2.NewTestMiner(mineBlock, act)),
+		node.Override(new(*lotusminer.Miner), lotusminer.NewTestMiner(mineBlock, act)),
 
 		opts,
 	)
@@ -544,7 +549,7 @@ func testStorageNode(ctx context.Context, waddr address.Address, act address.Add
 
 	err = minerapi.NetConnect(ctx, remoteAddrs)
 	require.NoError(t, err)*/
-	mineOne := func(ctx context.Context, req miner2.MineReq) error {
+	mineOne := func(ctx context.Context, req lotusminer.MineReq) error {
 		select {
 		case mineBlock <- req:
 			return nil
