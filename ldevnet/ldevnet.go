@@ -57,11 +57,6 @@ const (
 )
 
 func init() {
-	//power.ConsensusMinerMinPower = big.NewInt(2048)
-	//miner2.SupportedProofTypes = map[abi.RegisteredSealProof]struct{}{
-	//abi.RegisteredSealProof_StackedDrg2KiBV1: {},
-	//}
-	//verifreg.MinVerifiedDealSize = big.NewInt(256)
 	policy.SetConsensusMinerMinPower(abi.NewStoragePower(2048))
 	policy.SetSupportedProofTypes(abi.RegisteredSealProof_StackedDrg2KiBV1)
 	policy.SetMinVerifiedDealSize(abi.NewStoragePower(256))
@@ -288,9 +283,9 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 			preseals = nGenesisPreseals
 		}
 
-		size := abi.SectorSize(2048)
+		size := abi.RegisteredSealProof_StackedDrg2KiBV1
 		if bigSector {
-			size = abi.SectorSize(1024 * 1024 * 512)
+			size = abi.RegisteredSealProof_StackedDrg512MiBV1
 		}
 		genm, k, err := mockstorage.PreSeal(size, maddr, preseals)
 		if err != nil {
@@ -343,6 +338,8 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 
+			node.Override(new(dtypes.Bootstrapper), dtypes.Bootstrapper(true)),
+
 			genesis,
 			node.ApplyIf(func(s *node.Settings) bool { return len(ipfsAddr) > 0 },
 				node.Override(new(dtypes.ClientBlockstore), modules.IpfsClientBlockstore(ipfsAddr, onlineMode)),
@@ -378,7 +375,7 @@ func mockSbBuilder(nFull int, storage []test.StorageMiner, bigSector bool, ipfsA
 
 		storers[i] = testStorageNode(ctx, genms[i].Worker, maddrs[i], minersPk[i], f, mn, node.Options(
 			node.Override(new(sectorstorage.SectorManager), func() (sectorstorage.SectorManager, error) {
-				return mock.NewMockSectorMgr(policy.GetDefaultSectorSize(), sectors), nil
+				return mock.NewMockSectorMgr(sectors), nil
 			}),
 			node.Override(new(ffiwrapper.Verifier), mock.MockVerifier),
 			node.Unset(new(*sectorstorage.Manager)),
