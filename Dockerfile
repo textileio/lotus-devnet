@@ -1,4 +1,4 @@
-FROM golang:1.14 as builder
+FROM golang:1.15.5 as builder
 RUN apt-get update && apt-get install -y mesa-opencl-icd clang ocl-icd-opencl-dev jq hwloc libhwloc-dev
 
 WORKDIR /tmp
