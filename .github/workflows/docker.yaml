@@ -3,7 +3,7 @@ on:
   create:
   push:
     branches:
-        - jsign/v1.2.0
+        - jsign/v1.2.2
 jobs:
   docker:
     name: Docker publishing
