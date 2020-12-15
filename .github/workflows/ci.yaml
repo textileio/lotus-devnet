@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - jsign/v1.2.0
+      - jsign/v1.2.3
   pull_request:
     branches:
       - master

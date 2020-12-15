@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/filecoin-project/go-address v0.0.5-0.20201103152444-f2023ef3f5bb
-	github.com/filecoin-project/go-fil-markets v1.0.9
+	github.com/filecoin-project/go-fil-markets v1.0.10
 	github.com/filecoin-project/go-jsonrpc v0.1.2
 	github.com/filecoin-project/go-state-types v0.0.0-20201102161440-c8033295a1fc
 	github.com/filecoin-project/go-storedcounter v0.0.0-20200421200003-1c99c62e8a5b
@@ -29,4 +29,4 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/supranational/blst => ./extern/blst
 
-replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201203123804-7a123d733215
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201215204604-ba1259dfcea7

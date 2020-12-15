@@ -3,7 +3,7 @@ on:
   create:
   push:
     branches:
-        - v1.2.2
+        - v1.2.3
 jobs:
   docker:
     name: Docker publishing
