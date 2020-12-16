@@ -762,8 +762,8 @@ github.com/jonboulle/clockwork v0.1.1-0.20190114141812-62fb9bc030d1/go.mod h1:Ii
 github.com/jpillora/backoff v1.0.0 h1:uvFg412JmmHBHw7iwprIxkPMI+sGQ4kzOWsMeHnm2EA=
 github.com/jpillora/backoff v1.0.0/go.mod h1:J/6gKK9jxlEcS3zixgDgUAsiuZ7yrSoa/FX5e0EB2j4=
 github.com/jrick/logrotate v1.0.0/go.mod h1:LNinyqDIJnpAur+b8yyulnQw/wDuN1+BYKlTRt3OuAQ=
-github.com/jsign/lotus v0.4.1-0.20201215204604-ba1259dfcea7 h1:q12+IHQ8OQJ9aMY9a1ZBMXmGxRInIaQ4C2aMI1Ah9EU=
-github.com/jsign/lotus v0.4.1-0.20201215204604-ba1259dfcea7/go.mod h1:7unujOylpjY33Vhq+/RHRKzGUvWk8I3XIHlSN7LwLoA=
+github.com/jsign/lotus v0.4.1-0.20201216222242-0bc3ffc468d7 h1:f1h9Ku91xjhEkCvfvkd0hLOyWXZ4V1AGGlsMIbOIe8E=
+github.com/jsign/lotus v0.4.1-0.20201216222242-0bc3ffc468d7/go.mod h1:7unujOylpjY33Vhq+/RHRKzGUvWk8I3XIHlSN7LwLoA=
 github.com/jsimonetti/rtnetlink v0.0.0-20190606172950-9527aa82566a/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20190830100107-3784a6c7c552/go.mod h1:Oz+70psSo5OFh8DBl0Zv2ACw7Esh6pPUphlvZG9x7uw=
 github.com/jsimonetti/rtnetlink v0.0.0-20200117123717-f846d4f6c1f4/go.mod h1:WGuG/smIU4J/54PblvSbh+xvCZmpJnFgr3ds6Z55XMQ=

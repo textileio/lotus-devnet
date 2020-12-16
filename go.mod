@@ -9,7 +9,7 @@ require (
 	github.com/filecoin-project/go-jsonrpc v0.1.2
 	github.com/filecoin-project/go-state-types v0.0.0-20201102161440-c8033295a1fc
 	github.com/filecoin-project/go-storedcounter v0.0.0-20200421200003-1c99c62e8a5b
-	github.com/filecoin-project/lotus v1.2.3-rc1
+	github.com/filecoin-project/lotus v1.3.0-rc1
 	github.com/filecoin-project/specs-actors v0.9.13
 	github.com/filecoin-project/specs-actors/v2 v2.3.2
 	github.com/ipfs/go-datastore v0.4.5
@@ -29,4 +29,4 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/supranational/blst => ./extern/blst
 
-replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201215204604-ba1259dfcea7
+replace github.com/filecoin-project/lotus => github.com/jsign/lotus v0.4.1-0.20201216222242-0bc3ffc468d7
