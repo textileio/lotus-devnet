@@ -268,7 +268,7 @@ func CreateTestStorageNode(ctx context.Context, waddr address.Address, act addre
 		panic(err)
 	}
 
-	ds, err := lr.Datastore("/metadata")
+	ds, err := lr.Datastore(ctx, "/metadata")
 	if err != nil {
 		panic(err)
 	}

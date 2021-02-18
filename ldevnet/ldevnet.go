@@ -35,6 +35,7 @@ func init() {
 	node_internal.Init()
 
 	os.Setenv("TRUST_PARAMS", "1")
+	os.Setenv("LOTUS_DISABLE_WATCHDOG", "1")
 }
 
 type LocalDevnet struct {

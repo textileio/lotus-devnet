@@ -1,4 +1,4 @@
-FROM golang:1.15.5 as builder
+FROM golang:1.16.0 as builder
 RUN apt-get update && apt-get install -y mesa-opencl-icd clang ocl-icd-opencl-dev jq hwloc libhwloc-dev
 
 WORKDIR /tmp
@@ -14,10 +14,12 @@ WORKDIR /app
 COPY . .
 RUN mkdir -p extern/filecoin-ffi
 RUN make clean build
+RUN go mod download -x && go mod tidy
+RUN go get github.com/GeertJohan/go.rice/rice@v1.0.0
 RUN GOOS=linux go build -o local-devnet main.go  && \
 go run github.com/GeertJohan/go.rice/rice append --exec local-devnet -i ./build
 
-FROM golang:1.14
+FROM golang:1.16
 RUN apt-get update && apt-get install -y mesa-opencl-icd ocl-icd-opencl-dev clang hwloc libhwloc-dev
 COPY --from=builder /app/local-devnet /app/local-devnet
 WORKDIR /app 
