@@ -6,7 +6,7 @@ require (
 	github.com/GeertJohan/go.rice v1.0.0
 	github.com/filecoin-project/go-address v0.0.5
 	github.com/filecoin-project/go-commp-utils v0.1.0 // indirect
-	github.com/filecoin-project/go-fil-markets v1.2.5
+	github.com/filecoin-project/go-fil-markets v1.1.9
 	github.com/filecoin-project/go-jsonrpc v0.1.4-0.20210217175800-45ea43ac2bec
 	github.com/filecoin-project/go-state-types v0.1.0
 	github.com/filecoin-project/go-statestore v0.1.1 // indirect
