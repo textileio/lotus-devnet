@@ -363,7 +363,7 @@ func storerRpc(nd test.TestStorageNode) (test.TestStorageNode, error) {
 	}
 
 	var storer test.TestStorageNode
-	storer.StorageMiner, _, err = client.NewStorageMinerRPC(context.Background(), listenAddr, nil)
+	storer.StorageMiner, _, err = client.NewStorageMinerRPCV0(context.Background(), listenAddr, nil)
 	if err != nil {
 		return test.TestStorageNode{}, err
 	}
@@ -379,7 +379,7 @@ func fullRpc(nd test.TestNode) (test.TestNode, error) {
 	}
 
 	var full test.TestNode
-	full.FullNode, _, err = client.NewFullNodeRPC(context.Background(), listenAddr, nil)
+	full.FullNode, _, err = client.NewFullNodeRPCV1(context.Background(), listenAddr, nil)
 	if err != nil {
 		return test.TestNode{}, err
 	}

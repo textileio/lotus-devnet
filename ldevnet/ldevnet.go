@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/apistruct"
+	"github.com/filecoin-project/lotus/api"
 	"github.com/filecoin-project/lotus/api/client"
 
 	"github.com/filecoin-project/go-state-types/abi"
@@ -39,7 +39,7 @@ func init() {
 }
 
 type LocalDevnet struct {
-	Client *apistruct.FullNodeStruct
+	Client *api.FullNodeStruct
 
 	numMiners int
 	cancel    context.CancelFunc
@@ -71,7 +71,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string,
 	}
 
 	// Connect everyone.
-	client := n.FullNode.(*apistruct.FullNodeStruct)
+	client := n.FullNode.(*api.FullNodeStruct)
 	ctx, cancel := context.WithCancel(context.Background())
 	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
@@ -150,7 +150,7 @@ func rpcBuilder(storage []test.StorageMiner, bigSector bool, ipfsAddr string, on
 	}()
 	time.Sleep(time.Second)
 
-	n[0].FullNode, _, err = client.NewFullNodeRPC(context.Background(), "ws://127.0.0.1:7777", nil)
+	n[0].FullNode, _, err = client.NewFullNodeRPCV1(context.Background(), "ws://127.0.0.1:7777", nil)
 	if err != nil {
 		return test.TestNode{}, nil, err
 	}

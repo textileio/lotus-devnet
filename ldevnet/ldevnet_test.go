@@ -14,7 +14,6 @@ import (
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-jsonrpc"
 	"github.com/filecoin-project/lotus/api"
-	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	logging "github.com/ipfs/go-log/v2"
@@ -47,7 +46,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 		_, err := New(numMiners, time.Millisecond*100, true, "", false)
 		require.Nil(t, err)
 
-		var client apistruct.FullNodeStruct
+		var client api.FullNodeStruct
 		cc, err := jsonrpc.NewMergeClient(context.Background(), "ws://127.0.0.1:7777/rpc/v0", "Filecoin",
 			[]interface{}{
 				&client.Internal,
