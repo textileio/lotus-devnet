@@ -13,7 +13,8 @@ import (
 
 	"github.com/filecoin-project/go-fil-markets/storagemarket"
 	"github.com/filecoin-project/go-jsonrpc"
-	"github.com/filecoin-project/lotus/api"
+	lapi "github.com/filecoin-project/lotus/api"
+	api "github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/build"
 	"github.com/filecoin-project/lotus/chain/types"
 	logging "github.com/ipfs/go-log/v2"
@@ -80,11 +81,11 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			r.Read(data)
 			err = ioutil.WriteFile(tmpf.Name(), data, 0644)
 			require.Nil(t, err)
-			fcid, err := client.ClientImport(ctx, api.FileRef{Path: tmpf.Name()})
+			fcid, err := client.ClientImport(ctx, lapi.FileRef{Path: tmpf.Name()})
 			require.Nil(t, err)
 			require.True(t, fcid.Root.Defined())
 
-			sdp := &api.StartDealParams{
+			sdp := &lapi.StartDealParams{
 				Data: &storagemarket.DataRef{
 					TransferType: storagemarket.TTGraphsync,
 					Root:         fcid.Root,
@@ -127,7 +128,7 @@ func dealSpecificMiner(t *testing.T, numMiners int, concreteMiner int) func(*tes
 			defer os.RemoveAll(rpath)
 
 			// Retrieve to file.
-			ref := &api.FileRef{
+			ref := &lapi.FileRef{
 				Path:  filepath.Join(rpath, "ret"),
 				IsCAR: false,
 			}
