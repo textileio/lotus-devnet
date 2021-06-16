@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/filecoin-project/lotus/api/apistruct"
 	"github.com/filecoin-project/lotus/api/client"
+	"github.com/filecoin-project/lotus/api/v0api"
 
 	"github.com/filecoin-project/go-state-types/abi"
 
@@ -39,7 +39,7 @@ func init() {
 }
 
 type LocalDevnet struct {
-	Client *apistruct.FullNodeStruct
+	Client *v0api.FullNodeStruct
 
 	numMiners int
 	cancel    context.CancelFunc
@@ -71,7 +71,7 @@ func New(numMiners int, blockDur time.Duration, bigSector bool, ipfsAddr string,
 	}
 
 	// Connect everyone.
-	client := n.FullNode.(*apistruct.FullNodeStruct)
+	client := n.FullNode.(*v0api.FullNodeStruct)
 	ctx, cancel := context.WithCancel(context.Background())
 	addrinfo, err := client.NetAddrsListen(ctx)
 	if err != nil {
